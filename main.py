@@ -364,7 +364,6 @@ def getOfficeCodefromDistrict(district):
             return '0'+str(n)
     return None
 
-
 # page handlers
 class MainHandler(GenericHandler):
     def get(self):
@@ -405,7 +404,9 @@ class StatewideHandler(GenericHandler):
         if data:
             results=formatProperName(data)
             params['data']=results
-            self.render(statewide_page,**params)
+        self.render(statewide_page,**params)
+        # else:
+        #     self.redirect('/')
 
 class StatewideYearHandler(GenericHandler):
     def get(self,year):
@@ -455,9 +456,11 @@ class StatewideYearHandler(GenericHandler):
             if data:
                 results=formatProperName(data)
                 params['data']=results
-                self.render(statewide_page,**params)
+            self.render(statewide_page,**params)
+            # else:
+            #     self.redirect('/general/'+year)
         else:
-            self.redirect('/')
+            self.redirect('/general')
 
 class StatewideYearOfficeHandler(GenericHandler):
     def get(self,year,office):
@@ -474,7 +477,7 @@ class StatewideYearOfficeHandler(GenericHandler):
                     if data:
                         results=formatProperName(data)
                         params['data']=results
-                        self.render(statewide_page,**params)
+                    self.render(statewide_page,**params)
                 else:
                     if office=='senate':
                         params['active']='senate'
@@ -492,23 +495,24 @@ class StatewideYearOfficeHandler(GenericHandler):
                         params['data']=results
                     params['range']=state_leg_ranges[params['active']]
                     self.render(statewide_district_page,**params)
-            elif office in office_link_names:
-                params['active']=office
-                if year in all_amendment_text:
-                    if office in all_amendment_text[year]:
-                        params['amendment_text']=all_amendment_text[year][office]
-                params['office']=office_id_key[office_link_key[office]]
-                data=Results.by_year_by_office_id(params['year'],office_link_key[office])
-                if data:
-                    results=formatProperName(data)
-                    params['data']=results
+            elif office in office_link_key:
+                if office_link_key[office] in all_office_ids_by_year[year]['offices']:
+                    params['active']=office
+                    if year in all_amendment_text:
+                        if office in all_amendment_text[year]:
+                            params['amendment_text']=all_amendment_text[year][office]
+                    params['office']=office_id_key[office_link_key[office]]
+                    data=Results.by_year_by_office_id(params['year'],office_link_key[office])
+                    if data:
+                        results=formatProperName(data)
+                        params['data']=results
                     self.render(statewide_page,**params)
                 else:
-                    self.redirect('/')
+                    self.redirect('/general/'+year)
             else:
                 self.redirect('/general/'+year)
         else:
-            self.redirect('/')
+            self.redirect('/general')
 
 class StatewideYearUSHouseHandler(GenericHandler):
     def get(self,year,office):
@@ -517,19 +521,19 @@ class StatewideYearUSHouseHandler(GenericHandler):
             params['year']=year
             params['active']='ushouse'
             params=setStatewideParams(params) 
-            if int(office) < 9:
+            if int(office) < 9 and int(office) > 0:
                 params['office']=office
                 params['district_key']=us_rep_id_key
                 data=Results.by_year_by_office_id(params['year'],us_rep_id_key[int(params['office'])-1][0])
                 if data:
                     results=formatProperName(data)
                     params['data']=results
-                    self.render(statewide_page,**params)
+                self.render(statewide_page,**params)
             else:
-                self.redirect('/statewide/'+year+'/ushouse')
+                self.redirect('/general/'+year+'/ushouse')
                 
         else:
-            self.redirect('/statewide')
+            self.redirect('/general')
 
 class StatewideYearLegHandler(GenericHandler):
     def get(self,year,office,office_id):
@@ -540,7 +544,7 @@ class StatewideYearLegHandler(GenericHandler):
             params=setStatewideParams(params) 
             params['office']='State House'
             office_code=getOfficeCodefromDistrict(office_id)
-            if int(office_code) in state_leg_ranges[params['active']]: 
+            if office_code!=None:
                 params['district_id']=office_id
                 params['active_id']=office_code
                 data=Results.by_year_by_office_id(params['year'],params['active_id'])
@@ -549,27 +553,27 @@ class StatewideYearLegHandler(GenericHandler):
                     params['data']=results
                 params['range']=state_leg_ranges[params['active']]
                 self.render(statewide_district_page,**params)
-                #self.write(office_id)
+                # else:
+                #     self.redirect('/general/'+year+'/'+office) 
             else:
-                #self.write(office_id)
-                self.redirect('/statewide/'+year)
-                
+                self.redirect('/general/'+year+'/'+office)  
         else:
-            self.redirect('/statewide')
+            self.redirect('/general')
 
 class PrimaryHandler(GenericHandler):
     def get(self):
         params=self.check_login('/primary')
         params['year']='2012'
         params=setPrimaryParams(params)
-        #previous=self.request.get("office")
         params['office']=params['office_names'][0][1]
         params['active']=params['office_names'][0][0]
         data=Primary.by_year_by_office_id(params['year'],office_link_key[params['active']])
         if data:
             results=formatProperName(data)
             params=formatPrimaryResults(results,params)
-            self.render(primary_page,**params)
+        self.render(primary_page,**params)
+        # else:
+        #     self.redirect('/')
 
 class PrimaryYearHandler(GenericHandler):
     def get(self,year):
@@ -618,7 +622,6 @@ class PrimaryYearHandler(GenericHandler):
                 params['active']=params['office_names'][0][0]
                 data=Primary.by_year_by_office_id(params['year'],office_link_key[params['active']])
             else:
-                #params['office']=params['office_names'][0][1]
                 params['active']='ushouse'
                 params['districts']=p_ushouse_offices[params['year']]
                 params['active_id']=us_rep_id_key[0][0]
@@ -627,9 +630,11 @@ class PrimaryYearHandler(GenericHandler):
             if data:
                 results=formatProperName(data)
                 params=formatPrimaryResults(results,params)
-                self.render(primary_page,**params)
+            self.render(primary_page,**params)
+            # else:
+            #     self.redirect('/primary/'+year)
         else:
-            self.redirect('/')
+            self.redirect('/primary')
 
 class PrimaryYearOfficeHandler(GenericHandler):
     def get(self,year,office):
@@ -673,13 +678,13 @@ class PrimaryYearOfficeHandler(GenericHandler):
                 if data:
                     results=formatProperName(data)
                     params=formatPrimaryResults(results,params)
-                    self.render(primary_page,**params)
-                else:
-                    self.redirect('/')
+                self.render(primary_page,**params)
+                # else:
+                #     self.redirect('/primary/'+year)
             else:
-                self.redirect('/'+year)
+                self.redirect('/primary/'+year)
         else:
-            self.redirect('/')
+            self.redirect('/primary')
 
 class PrimaryYearUSHouseHandler(GenericHandler):
     def get(self,year,office):
@@ -697,7 +702,9 @@ class PrimaryYearUSHouseHandler(GenericHandler):
                 if data:
                     results=formatProperName(data)
                     params=formatPrimaryResults(results,params)
-                    self.render(primary_page,**params)
+                self.render(primary_page,**params)
+                # else:
+                #     self.redirect('/primary/'+year)
             else:
                 self.redirect('/primary/'+year+'/ushouse')      
         else:
@@ -708,28 +715,28 @@ class PrimaryYearLegHandler(GenericHandler):
         params=self.check_login("/primary/"+year+'/'+office+'/'+office_id)
         if year in election_years:
             params['year']=year
-            if office=='house' or office=='senate':
-                params['active']=office
-                params=setPrimaryParams(params) 
-                if office=='senate':
-                    params['active']='senate'
-                    params['office']='State Senate'
-                else:
-                    params['active']='house'
-                    params['office']='State House'
-                params['districts']=Primary.get_offices_by_other_office(params['year'],params['active'])
-                params['district_id']=office_id
-                params['active_id']=getOfficeCodefromDistrict(office_id)
-                data=Primary.by_year_by_office_id(params['year'],params['active_id'])
-                if data:
-                    results=formatProperName(data)
-                    params=formatPrimaryResults(results,params)
-                self.render(primary_page,**params)
-                # else:
-                #     self.redirect('/primary/'+year)
+            params['active']=office
+            params=setPrimaryParams(params) 
+            if office=='senate':
+                params['active']='senate'
+                params['office']='State Senate'
             else:
-                self.redirect('/primary/'+year)
-                
+                params['active']='house'
+                params['office']='State House'
+            params['districts']=Primary.get_offices_by_other_office(params['year'],params['active'])
+            data=None
+            for d in params['districts']:
+                if d[1] == office_id:
+                    params['district_id']=office_id
+                    params['active_id']=getOfficeCodefromDistrict(office_id)
+                    data=Primary.by_year_by_office_id(params['year'],params['active_id'])
+                    break
+            if data!=None:
+                results=formatProperName(data)
+                params=formatPrimaryResults(results,params)
+                self.render(primary_page,**params)
+            else:
+                self.redirect('/primary/'+year+'/'+office)
         else:
             self.redirect('/primary')
 
@@ -787,7 +794,6 @@ class NotFoundPageHandler(GenericHandler):
         self.error(404)
         #self.response.out.write('<Your 404 error html page>')
         self.render(e404_page,**params)	    	
-
 
 app = webapp2.WSGIApplication([
     ('/?', MainHandler),
