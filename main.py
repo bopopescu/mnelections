@@ -36,6 +36,9 @@ statewide_house_page='statewide-house.html'
 statewide_district_page='statewide-district.html'
 primary_page='primary.html'
 history_page='history.html'
+about_page='about.html'
+feedback_page='feedback.html'
+feedback_response_page='feedback-response.html'
 e404_page='404.html'
 
 #environment loader, load template from aws
@@ -788,6 +791,21 @@ class ParsePrecinctTableHandler(GenericHandler):
 			else:
 				self.write('no data')
 
+class AboutPageHandler(GenericHandler):
+    def get(self):
+        params=self.check_login('/about')
+        self.render(about_page,**params)  
+
+class FeedbackPageHandler(GenericHandler):
+    def get(self):
+        params=self.check_login('/feedback')
+        self.render(feedback_page,**params)  
+
+class FeedbackResponsePageHandler(GenericHandler):
+    def get(self):
+        params=self.check_login('/feedback-response')
+        self.render(feedback_response_page,**params)  
+
 class NotFoundPageHandler(GenericHandler):
     def get(self):
         params=self.check_login('404')
@@ -813,5 +831,8 @@ app = webapp2.WSGIApplication([
     ('/primary/([0-9]+)/([A-Za-z0-9]+)?/?', PrimaryYearOfficeHandler),
     ('/primary/([0-9]+)/ushouse/([0-9])/?', PrimaryYearUSHouseHandler),
     ('/primary/([0-9]+)/(house|senate)/([0-9]+[A|B]?)/?', PrimaryYearLegHandler),
+    ('/about/?', AboutPageHandler),
+    ('/feedback/?', FeedbackPageHandler),
+    ('/feedback-response/?', FeedbackResponsePageHandler),
     ('/.*', NotFoundPageHandler),
 ], debug=True)
