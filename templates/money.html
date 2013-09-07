@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script type="text/javascript">
+  google.load("visualization", "1", {packages:["corechart","table"]});
+  google.setOnLoadCallback(drawChart);
+  
+  function drawChart() {
+    var table_data = google.visualization.arrayToDataTable([
+        ['Candidate','Party','Beginning CoH','Ending CoH','Net Contributions','Net Expenditures'],
+        {% for d in data %}['{{d['name']}}','{{d['party'][0]}}',{{d['money']['Beginning Cash On Hand']}},{{d['money']['Ending Cash On Hand']}},{{d['money']['Net Contributions']}},{{d['money']['Net Operating Expenditures']}}],{% endfor %}]);
+
+    var table_options = {title: '2012 FEC Reports',
+            allowHtml: true,
+            fontSize: 14,
+          };
+
+    var table = new google.visualization.Table(document.getElementById('table_div'));
+    table.draw(table_data, table_options);
+  };
+</script>
+
+<div id='front-dashboard-container'>
+  <h1>US House Fundraising</h1><h2>{{data[0]['description']}}</h2><br><br>
+    
+
+	<div id="fec-chart-area">
+		<div id="table_div" style='width:770px;'></div>
+		<div id="fec-copywrite"><em>{{data[0]['copyright']}}</em></div>
+	</div>
+</div>
+{% endblock %}
