@@ -8,6 +8,18 @@ base_url='http://openstates.org/api/v1/'
 apikey_url="apikey="
 mnleg_district_demo_info='http://www.gis.leg.mn/redist2010/Legislative/L2012/text/'
 mncong_district_demo_info='http://www.gis.leg.mn/redist2010/Congressional/C2012/text/'
+ushouse_base_url='http://transparencydata.com/api/1.0/entities'
+
+ushouse_lookup_ids={
+    '1':'d0a7e006e79642ec8f5e53ab8234e2d3',
+    '2':'2a42e601cc4545e092aab2a057947c88',
+    '3':'334a36f20cd84104b9fbdbf7319f7930',
+    '4':'7f99871b176345a4b03827b179cef482',
+    '5':'69450767ce3c46bda62793e3dab644f6',
+    '6':'86b2f97e11fc4a87be8d621fd46fc7e6',
+    '7':'c84099ce5eb64a988f1705b7d052cf61',
+    '8':'52c29eca5ca04cc4b69d741d776e7db4',
+}
 
 def parseCSVfromURL(page,delimiter):
 	csvio = cStringIO.StringIO(page)
@@ -141,3 +153,20 @@ def getMNLegDistrictById(district_id):
     #http://openstates.org/api/v1/districts/boundary/sldu/mn-11/?apikey=4a26c19c3cae4f6c843c3e7816475fae
     url=base_url+'districts/boundary/'+district_id+'/?'+apikey_url+API_KEY
     return sendGetRequest(url)
+
+def getUSHouseMemberData(district):
+    #http://transparencydata.com/api/1.0/entities/d0a7e006e79642ec8f5e53ab8234e2d3.json?apikey=4a26c19c3cae4f6c843c3e7816475fae
+    if district in ushouse_lookup_ids:
+        url=ushouse_base_url+'/'+ushouse_lookup_ids[district]+'.json?'+apikey_url+API_KEY
+        return sendGetRequest(url)
+    else:
+        return None
+
+def getFECData(district):
+    try:
+        # json_data = open('/static/two_year_summary.json').read()
+        # data=json.dumps(json_data)
+        data = open('static/two_year_summary.json')
+        return data
+    except:
+        return None

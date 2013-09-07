@@ -23,7 +23,8 @@ from boto.s3.key import Key
 import boto
 import ConfigParser
 from links import results_links,p_results_links,county_links,precinct_table_links
-from elections import fetchElectionResults,fetchPrecinctTable
+from elections import (fetchElectionResults,fetchPrecinctTable,getAllMNLegDistrictShapesbyChamber,
+                    getMNLegDistrictShape,fetchDistrictDemoData,getFECData)
 from parse import (addPrecinctTableToParse,addPrecinctsToParse,addCountiesToParse,
 					addResultsToParse,Results,addPrimaryToParse,Primary,)
 from utils import (check_secure_val,make_secure_val,check_valid_signup,escape_html,
@@ -37,6 +38,10 @@ statewide_district_page='statewide-district.html'
 primary_page='primary.html'
 history_page='history.html'
 graph_page='elections-graph.html'
+maps_page='maps.html'
+maps_district_page='maps-district.html'
+maps_ushouse_district_page='maps-ushouse-district.html'
+cong_bubble='cong-bubble-chart.html'
 about_page='about.html'
 feedback_page='feedback.html'
 feedback_response_page='feedback-response.html'
@@ -302,6 +307,14 @@ graph_page_style_names={
     'percent':'vote %',
 }
 
+def getChamberName(name):
+    if name=='house':
+        return 'lower'
+    elif name=='senate':
+        return 'upper'
+    else:
+        return name
+
 def formatProperName(data):
     results=[]
     for d in data:
@@ -421,7 +434,6 @@ def formatChartOfficeData(data,style):
                     results.append([year,'0',gop_table[year],'0'])
             else:
                 results.append([year,'0',gop_table[year]])
-
     return ip_present,sorted(results, key=lambda results: int(results[0]),reverse=False)
 
 # page handlers
@@ -893,6 +905,139 @@ class CustomGraphPageHandler(GenericHandler):
         else:
             self.redirect('/graph')
 
+class MapsPageHandler(GenericHandler):
+    def get(self): 
+        params=self.check_login('/maps')
+        params['range']=range(1,9)
+        params['district_map']='ushouse'
+        params['office']="US House"
+        self.render(maps_ushouse_district_page,**params)
+
+class MapsChamberPageHandler(GenericHandler):
+    def get(self,chamber): 
+        params=self.check_login('/maps/'+chamber)
+        page=get_contents_of_url(aws_output+'maps/'+chamber)
+        if page:
+            self.write(page)
+        else:
+            params['district_map']=chamber
+            if chamber=='ushouse':
+                params['range']=range(1,9)
+                params['office']="US House"
+                params['districts']=[]
+                self.render(maps_ushouse_district_page,**params)
+                # k = getAWSKey('output/maps/'+chamber)
+                # k.set_contents_from_string(render_str(maps_ushouse_district_page, **params))
+                # k.set_acl('public-read')
+                # self.write(k.get_contents_as_string())
+            else:
+                params['office']="State " + chamber.title()
+                if chamber=='house':
+                    params['range']=range(1,135)
+                else:
+                    params['range']=range(1,68)
+                params['districts']=getAllMNLegDistrictShapesbyChamber(getChamberName(chamber))
+                k = getAWSKey('output/maps/'+chamber)
+                k.set_contents_from_string(render_str(maps_page, **params))
+                k.set_acl('public-read')
+                self.write(k.get_contents_as_string())
+
+class MapsChamberDistrictPageHandler(GenericHandler):
+    def get(self,chamber,dist_id): 
+        params=self.check_login('/maps/'+chamber+'/'+dist_id)
+        params['district_map']=chamber
+        if chamber=='ushouse':
+            params['range']=range(1,9)
+            params['office']="US House"
+            try:
+                params['dist_num']=int(dist_id)
+                if params['dist_num']<9 and params['dist_num']>0:
+                    params['demo'],params['demo_url']=fetchDistrictDemoData('0'+str(params['dist_num']),'ushouse')
+                    params['district']=dist_id
+                    params['data']=[]
+                    #self.write('0'+str(params['dist_num']))
+                    self.render(maps_ushouse_district_page,**params)
+                else:
+                    self.redirect('/maps/'+chamber)
+            except:
+                self.redirect('/maps/'+chamber)
+        else:
+            params['office']="State " + chamber.title()
+            if chamber=='senate':
+                if dist_id.isdigit():
+                    params['dist_num']=int(dist_id)
+                    if params['dist_num']<68 and params['dist_num']>0:
+                        params['range']=range(1,68)
+                        params['district']=getMNLegDistrictShape(getChamberName(chamber),dist_id)
+                        data=Results.by_year_by_office_id('2012','0'+str(params['dist_num']+120))
+                        if data:
+                            results=formatProperName(data)
+                            params['data']=results
+                        self.render(maps_district_page,**params)
+                    else:
+                        self.redirect('/maps/'+chamber)
+                else:
+                    self.redirect('/maps/'+chamber)
+            else:
+                try:
+                    n=int(dist_id[:-1])*2
+                    if n<135 and n>0:
+                        if dist_id.find('B') == -1 and dist_id.find('A') > 0:
+                            n-=1
+                        params['dist_num']=n
+                        params['range']=range(1,135)
+                        params['district']=getMNLegDistrictShape(getChamberName(chamber),dist_id)
+                        data=Results.by_year_by_office_id('2012','0'+str(params['dist_num']+187))
+                        if data:
+                            results=formatProperName(data)
+                            params['data']=results
+                        self.render(maps_district_page,**params)
+                    else:
+                        self.redirect('/graph')
+                except:
+                    self.redirect('/graph')
+
+
+class BubblePageHandler(GenericHandler):
+    def get(self):
+        params=self.check_login('/bubble')
+        self.render(cong_bubble,**params)  
+
+class MemberPageHandler(GenericHandler):
+    def get(self):
+        params=self.check_login('/member')
+        #data=getFECData('1')
+        # for d in data['totals']:
+        #     for n in data['totals'][d]:
+        #         if data['totals'][d][n]>0:
+        #             self.write(d)
+        #             self.write(' - ')
+        #             self.write(n)
+        #             self.write(' - ')
+        #             self.write(data['totals'][d][n])
+        #self.write(data)
+        try:
+            #with open('//static/two_year_summary.json'): 
+            
+            self.write(os.path.isfile(cong_bubble))
+        except IOError:
+            self.write('File does not exist')
+        #             self.write('<br>')
+            # self.write('<br>')
+            # self.write('<br>')
+        # self.write('Metadata: ')
+        # self.write(data['metadata'])
+        # self.write('<br>')
+        
+        #self.render(cong_bubble,**params)
+
+        # totals
+        # type: politician
+        # external_ids: [{'id':'N00027467', 'namespace':'urn:crp:recipient'}, {'id':'H6MN01174', 'namespace':'urn:fec:candidate'}]
+        # name: Timothy J Walz (D)
+        # metadata
+        # id:d0a7e006e79642ec8f5e53ab8234e2d3
+
 class ParseResultsHandler(GenericHandler):
     def get(self,year):
         params=self.check_login("/parse/results/"+year)
@@ -983,6 +1128,11 @@ app = webapp2.WSGIApplication([
     ('/primary/([0-9]+)/(house|senate)/([0-9]+[A|B]?)/?', PrimaryYearLegHandler),
     ('/graph/?', GraphPageHandler),
     ('/graph/c', CustomGraphPageHandler),
+    ('/maps/?', MapsPageHandler),
+    ('/maps/(ushouse|house|senate)/?', MapsChamberPageHandler),
+    ('/maps/(ushouse|house|senate)/([0-9][0-9]?[A|B]?)/?', MapsChamberDistrictPageHandler),
+    ('/bubble/?', BubblePageHandler),
+    ('/member/?', MemberPageHandler),
     ('/about/?', AboutPageHandler),
     ('/feedback/?', FeedbackPageHandler),
     ('/feedback-response/?', FeedbackResponsePageHandler),
