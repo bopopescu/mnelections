@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% include 'graph-table-primary-js.html' %}
+
+<div id='front-dashboard-container'>
+  <h1>Minnesota Primary Elections</h1><h2>{{year}} - {% if active == 'ushouse' %}US House, District {% endif %}{{office}} {{district_id}}</h2><br><br>
+    {% include 'p-menus.html' %}
+
+	<div id="primary-chart-area">
+
+    	{% if dfl_data|length() > 0 %}
+		<div id="{{year}}_dfl_chart_div" class='google-bar-chart'style='width:275px; height:250px;'></div>
+    	<div id="{{year}}_dfl_table_div" class='vote-table' style='width:350px; min-height:250px;'></div>
+    	{% endif %}
+    	{% if gop_data|length() > 0 %}
+    	<div id="{{year}}_gop_chart_div" class='google-bar-chart'style='width:275px; height:250px;'></div>
+    	<div id="{{year}}_gop_table_div" class='vote-table' style='width:350px; min-height:250px;'></div>
+    	{% endif %}
+    	{% if ip_data|length() > 0 %}
+    	<div id="{{year}}_ip_chart_div" class='google-bar-chart'style='width:275px; height:250px;'></div>
+    	<div id="{{year}}_ip_table_div" class='vote-table' style='width:350px; min-height:250px;'></div>
+    	{% endif %}
+	</div>
+</div>
+{% endblock %}

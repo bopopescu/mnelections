@@ -1,0 +1,642 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization',
+       'version':'1','packages':['timeline']}]}"></script>
+<script type="text/javascript">
+
+google.setOnLoadCallback(drawChart);
+function drawChart() {
+
+  var container = document.getElementById('timeline_div');
+  var chart = new google.visualization.Timeline(container);
+
+  var dataTable = new google.visualization.DataTable();
+  dataTable.addColumn({ type: 'string', id: 'Position' });
+  dataTable.addColumn({ type: 'string', id: 'Name' });
+  dataTable.addColumn({ type: 'date', id: 'Start' });
+  dataTable.addColumn({ type: 'date', id: 'End' });
+  dataTable.addRows([
+    {% if year == '1979' %}
+        ['US Senator - 1','Amy Klobuchar',new Date(2007, 0, 2),new Date()],
+        ['US Senator - 1','Mark Dayton',new Date(2001, 0, 2),new Date(2007, 0, 1)],
+        ['US Senator - 1','Rod Grams',new Date(1995, 0, 2),new Date(2001, 0, 1)],
+        ['US Senator - 1','David Durenberger',new Date(1978, 10, 6),new Date(1995, 0, 1)],
+        ['US Senator - 2','Al Franken',new Date(2009, 6, 6),new Date()],
+        ['US Senator - 2','Vacant',new Date(2009, 0, 2),new Date(2009, 6, 5)],
+        ['US Senator - 2','Norm Coleman',new Date(2003, 0, 2),new Date(2009, 0, 1)],
+        ['US Senator - 2','Dean Barkley',new Date(2002, 10, 3),new Date(2003, 0, 1)],
+        ['US Senator - 2','Vacant',new Date(2002, 9, 24),new Date(2002, 10, 2)],
+        ['US Senator - 2','Paul Wellstone',new Date(1991, 0, 2),new Date(2002, 9, 23)],
+        ['US Senator - 2','Rudy Boschwitz', new Date(1978, 11, 29),new Date(1991, 0, 1)],
+        ['Governor','Mark Dayton',new Date(2011, 0, 2),new Date()],
+        ['Governor','Tim Pawlenty',new Date(2003, 0, 5),new Date(2011, 0, 1)],
+        ['Governor','Jesse Ventura',new Date(1999, 0, 3),new Date(2003, 0, 4)],
+        ['Governor','Arne Carlson',new Date(1991, 0, 6),new Date(1999, 0, 2)],
+        ['Governor','Rudy Perpich', new Date(1983, 0, 2),new Date(1991, 0, 5)],
+        ['Governor','Al Quie', new Date(1979, 0, 3),new Date(1983, 0, 1)],
+        ['Lt. Governor','Yvonne Prettner Solon',new Date(2011, 0, 2),new Date()],
+        ['Lt. Governor','Carol Molnau',new Date(2003, 0, 5),new Date(2011, 0, 1)],
+        ['Lt. Governor','Mae Schunk',new Date(1999, 0, 3),new Date(2003, 0, 4)],
+        ['Lt. Governor','Joanne Benson',new Date(1995, 0, 2),new Date(1999, 0, 2)],
+        ['Lt. Governor','Joanell Dyrstad',new Date(1991, 0, 6),new Date(1995, 0, 1)],
+        ['Lt. Governor','Marlene Johnson', new Date(1983, 0, 2),new Date(1991, 0, 5)],
+        ['Lt. Governor','Lou Wangberg', new Date(1979, 0, 3),new Date(1983, 0, 1)],
+        ['Secretary of State','Mark Ritchie',new Date(2007, 0, 1),new Date()],
+        ['Secretary of State','Mary Kiffmeyer',new Date(1999, 0, 3),new Date(2007, 0, 0)],
+        ['Secretary of State','Joan Growe',new Date(1979, 0, 3),new Date(1999, 0, 2)],
+        ['Attorney General','Lori Swanson',new Date(2007, 0, 1),new Date()],
+        ['Attorney General','Mike Hatch',new Date(1999, 0, 3),new Date(2007, 0, 0)],
+        ['Attorney General','Hubert Humphrey III',new Date(1983, 0, 2),new Date(1999, 0, 2)],
+        ['Attorney General','Warren Spannaus',new Date(1979, 0, 0),new Date(1983, 0, 1)],
+        ['Auditor','Rebecca Otto',new Date(2007, 0, 1),new Date()],
+        ['Auditor','Patricia Anderson',new Date(2003, 0, 5),new Date(2007, 0, 0)],
+        ['Auditor','Judi Dutcher',new Date(1995, 0, 2),new Date(2003, 0, 4)],
+        ['Auditor','Mark Dayton',new Date(1991, 0, 6),new Date(1995, 0, 1)],
+        ['Auditor','Arne Carlson',new Date(1979, 0, 3),new Date(1991, 0, 5)],
+        ['Treasurer','Inactive',new Date(2003, 0, 6),new Date()],
+        ['Treasurer','Carol Johnson',new Date(1999, 0, 3),new Date(2003, 0, 5)],
+        ['Treasurer','Michael McGrath',new Date(1987, 0, 4),new Date(1999, 0, 3)],
+        ['Treasurer','Robert Mattson',new Date(1983, 0, 2),new Date(1987, 0, 3)],
+        ['Treasurer','Jim Lord',new Date(1979, 0, 0),new Date(1983, 0, 1)],
+        ['US House - 1','Tim Walz',new Date(2007, 0, 2),new Date()],
+        ['US House - 1','Gil Gutknecht',new Date(1995, 0, 2),new Date(2007, 0, 1)],
+        ['US House - 1','Tim Penny',new Date(1983, 0, 2),new Date(1995, 0, 1)],
+        ['US House - 1','Arlen Erdahl',new Date(1979, 0, 2),new Date(1983, 0, 1)],
+        ['US House - 2','John Kline',new Date(2003, 0, 2),new Date()],
+        ['US House - 2','Mark Kennedy',new Date(2001, 0, 2),new Date(2003, 0, 1)],
+        ['US House - 2','David Minge',new Date(1993, 0, 2),new Date(2001, 0, 1)],
+        ['US House - 2','Vin Weber',new Date(1983, 0, 2),new Date(1993, 0, 1)],
+        ['US House - 2','Tom Hagedorn',new Date(1979, 0, 0),new Date(1983, 0, 1)],
+        ['US House - 3','Erik Paulsen',new Date(2009, 0, 2),new Date()],
+        ['US House - 3','Jim Ramstad',new Date(1991, 0, 2),new Date(2009, 0, 1)],
+        ['US House - 3','Bill Frenzel',new Date(1979, 0, 0),new Date(1991, 0, 1)],
+        ['US House - 4','Betty McCollum',new Date(2001, 0, 2),new Date()],
+        ['US House - 4','Vacant',new Date(2000, 9, 9),new Date(2001, 0, 1)],
+        ['US House - 4','Bruce Vento',new Date(1979, 0, 0),new Date(2000, 9, 8)],
+        ['US House - 5','Keith Ellison',new Date(2007, 0, 2),new Date()],
+        ['US House - 5','Martin Sabo',new Date(1979, 0, 2),new Date(2007, 0, 1)],
+        ['US House - 6','Michele Bachmann',new Date(2007, 0, 2),new Date()],
+        ['US House - 6','Mark Kennedy',new Date(2003, 0, 2),new Date(2007, 0, 1)],
+        ['US House - 6','Bill Luther',new Date(1995, 0, 2),new Date(2003, 0, 1)],
+        ['US House - 6','Rod Grams',new Date(1993, 0, 2),new Date(1995, 0, 1)],
+        ['US House - 6','Gerry Sikorski',new Date(1983, 0, 2),new Date(1993, 0, 1)],
+        ['US House - 6','Vin Weber',new Date(1981, 0, 2),new Date(1983, 0, 1)],
+        ['US House - 6','Rick Nolan',new Date(1979, 0, 0),new Date(1981, 0, 1)],
+        ['US House - 7','Collin Peterson',new Date(1991, 0, 2),new Date()],
+        ['US House - 7','Arlan Stangeland',new Date(1979, 0, 0),new Date(1991, 0, 1)],
+        ['US House - 8','Rick Nolan',new Date(2013, 0, 2),new Date()],
+        ['US House - 8','Chip Cravaack',new Date(2011, 0, 2),new Date(2013, 0, 1)],
+        ['US House - 8','Jim Oberstar',new Date(1979, 0, 0),new Date(2011, 0, 1)],
+        ]);
+
+    var options = {
+        timeline: { groupByRowLabel: true },
+        colors: ['#0000DD','#0000DD','#DD0000','#DD0000', // us senate 1
+        '#0000DD','#DDDDDD','#DD0000','#44DD44','#0000DD', '#DD0000', // us senate 2
+        '#DD0000', '#44DD44','#DD0000','#0000DD','#DD0000', // governor
+        '#0000DD','#DD0000', '#44DD44','#DD0000','#DD0000','#0000DD','#DD0000', // lt. gov
+        '#0000DD','#DD0000','#0000DD', // sec of state
+        '#0000DD','#0000DD','#0000DD','#0000DD', // ag
+        '#0000DD','#DD0000','#0000DD', // auditor
+        '#DDDDDD','#0000DD','#0000DD','#0000DD','#0000DD', // treasurer
+        '#0000DD','#DD0000','#0000DD','#DD0000', // us house, 1
+        '#DD0000','#DD0000','#0000DD','#DD0000','#DD0000', // us house, 2
+        '#DD0000','#DD0000','#DD0000', // us house, 3
+        '#0000DD','#0000DD', // us house, 4
+        '#0000DD','#0000DD', // us house, 5
+        '#DD0000','#0000DD','#0000DD','#0000DD', // us house, 6
+        '#0000DD','#DD0000', // us house, 7
+        '#DD0000','#0000DD' // us house, 8
+        ],
+
+    {% elif year == '1949' %}
+        ['US Senator - 1','Muriel Humphrey', new Date(1978, 0, 24),new Date(1978, 10, 5)],
+        ['US Senator - 1','Vacant', new Date(1978, 0, 12),new Date(1978, 0, 23)],
+        ['US Senator - 1','Hubert Humphrey', new Date(1971, 0, 2),new Date(1978, 0, 11)],
+        ['US Senator - 1','Eugene McCarthy', new Date(1959, 0, 2),new Date(1971, 0, 1)],
+        ['US Senator - 1','Edward John Thye', new Date(1949, 0, 0),new Date(1959, 0, 1)],
+        ['US Senator - 2','Wendell Anderson', new Date(1976, 11, 29),new Date(1978, 11, 28)],
+        ['US Senator - 2','Walter Mondale', new Date(1964, 11, 29),new Date(1976, 11, 29)],
+        ['US Senator - 2','Hubert Humphrey', new Date(1949, 0, 2),new Date(1964, 11, 28)],
+        ['Governor','Rudy Perpich',new Date(1976, 11, 28),new Date(1979, 0, 2)],
+        ['Governor','Wendell Anderson',new Date(1971, 0, 3),new Date(1976, 11, 27)],
+        ['Governor','Harold LeVander',new Date(1967, 0, 1),new Date(1971, 0, 2)],
+        ['Governor','Karl Rolvaag',new Date(1963, 2, 24), new Date(1967, 0, 0)],
+        ['Governor','Elmer Anderson',new Date(1961, 0, 1),new Date(1963, 2, 23)],
+        ['Governor','Orville Freeman',new Date(1955, 0, 1),new Date(1961, 0, 0)],
+        ['Governor','C. Elmer Anderson',new Date(1951, 8, 26),new Date(1955, 0, 0)],
+        ['Governor','Luther Youngdahl',new Date(1949, 0, 0),new Date(1951, 8, 25)],
+        ['Lt. Governor','Alec Olson', new Date(1976, 11, 28),new Date(1979, 0, 2)],
+        ['Lt. Governor','Rudy Perpich',new Date(1971, 0, 3),new Date(1976, 11, 27)],
+        ['Lt. Governor','James Goetz',new Date(1967, 0, 1),new Date(1971, 0, 2)],
+        ['Lt. Governor','A.M. Keith',new Date(1963, 0, 7), new Date(1967, 0, 0)],
+        ['Lt. Governor','Karl Rolvaag',new Date(1955, 0, 1),new Date(1963, 0, 6)],
+        ['Lt. Governor','Donald Wright',new Date(1954, 8, 2),new Date(1955, 0, 0)],
+        ['Lt. Governor','Ancher Nelsen',new Date(1953, 0, 4),new Date(1954, 8, 1)],
+        ['Lt. Governor','Vacant',new Date(1951, 8, 26),new Date(1953, 0, 3)],
+        ['Lt. Governor','C. Elmer Anderson',new Date(1949, 0, 0),new Date(1951, 8, 25)],
+        ['Secretary of State','Joan Growe',new Date(1975, 0, 5),new Date(1979, 0, 2)],
+        ['Secretary of State','Arlen Erdahl',new Date(1971, 0, 3),new Date(1975, 0, 2)],
+        ['Secretary of State','Joseph Donovan',new Date(1955, 0, 3),new Date(1971, 0, 2)],
+        ['Secretary of State','Virginia Holm',new Date(1952, 8, 15),new Date(1955, 0, 2)],
+        ['Secretary of State','H.H. Chesterman',new Date(1952, 6, 6),new Date(1952, 8, 14)],
+        ['Secretary of State','Mike Holm',new Date(1949, 0, 0),new Date(1952, 6, 5)],
+        ['Attorney General','Warren Spannaus',new Date(1971, 0, 3),new Date(1979, 0, 0)],
+        ['Attorney General','Douglas Head',new Date(1967, 0, 1),new Date(1971, 0, 2)],
+        ['Attorney General','Robert Mattson',new Date(1964, 11, 29),new Date(1967, 0, 0)],
+        ['Attorney General','Walter Mondale',new Date(1960, 4, 3),new Date(1964, 11, 28)],
+        ['Attorney General','Miles Lord',new Date(1955, 0, 2),new Date(1960, 4, 2)],
+        ['Attorney General','J.A.A. Burnquist',new Date(1949, 0, 0),new Date(1955, 0, 1)],
+        ['Auditor','Robert Mattson',new Date(1975, 0, 5),new Date(1979, 0, 2)],
+        ['Auditor','Rolland Hatfield',new Date(1971, 0, 3),new Date(1975, 0, 4)],
+        ['Auditor',"William O'Brien",new Date(1969, 2, 6),new Date(1971, 0, 2)],
+        ['Auditor','Stafford King',new Date(1949, 0, 0),new Date(1969, 2, 5)],
+        ['Treasurer','Jim Lord',new Date(1975, 0, 5),new Date(1979, 0, 0)],
+        ['Treasurer','Val Bjornson',new Date(1957, 0, 6),new Date(1975, 0, 4)],
+        ['Treasurer','Arthur Hansen',new Date(1955, 0, 2),new Date(1957, 0, 5)],
+        ['Treasurer','Val Bjornson',new Date(1951, 0, 1),new Date(1955, 0, 1)],
+        ['Treasurer','Julius Schmahl',new Date(1949, 0, 0),new Date(1951, 0, 0)],
+        ['US House - 1','Al Quie',new Date(1958, 1, 17),new Date(1979, 0, 1)],
+        ['US House - 1','Vacant',new Date(1958, 0, 13),new Date(1958, 1, 16)],
+        ['US House - 1','August Andresen',new Date(1949, 0, 0),new Date(1958, 0, 12)],
+        ['US House - 2','Tom Hagedorn',new Date(1975, 0, 2),new Date(1979, 0, 0)],
+        ['US House - 2','Vacant',new Date(1974, 11, 30),new Date(1975, 0, 1)],
+        ['US House - 2','Ancher Nelsen',new Date(1959, 0, 2),new Date(1974, 11, 29)],
+        ['US House - 2',"Joseph O'Hara",new Date(1949, 0, 0),new Date(1959, 0, 1)],
+        ['US House - 3','Bill Frenzel',new Date(1971, 0, 2),new Date(1979, 0, 0)],
+        ['US House - 3','Clark MacGregor',new Date(1961, 0, 2),new Date(1971, 0, 1)],
+        ['US House - 3','Roy Wier',new Date(1949, 0, 2),new Date(1961, 0, 1)],
+        ['US House - 4','Bruce Vento',new Date(1977, 0, 2),new Date(1979, 0, 0)],
+        ['US House - 4','Joseph Karth',new Date(1959, 0, 2),new Date(1977, 0, 1)],
+        ['US House - 4','Eugene McCarthy',new Date(1949, 0, 2),new Date(1959, 0, 1)],
+        ['US House - 5','Donald Fraser',new Date(1963, 0, 2),new Date(1979, 0, 1)],
+        ['US House - 5','Walter Judd',new Date(1949, 0, 0),new Date(1963, 0, 1)],
+        ['US House - 6','Rick Nolan',new Date(1975, 0, 2),new Date(1979, 0, 0)],
+        ['US House - 6','John Zwach',new Date(1967, 0, 2),new Date(1975, 0, 1)],
+        ['US House - 6','Alec Olson',new Date(1963, 0, 2),new Date(1967, 0, 1)],
+        ['US House - 6','Fred Marshall',new Date(1949, 0, 2),new Date(1963, 0, 1)],
+        ['US House - 7','Arlan Stangeland',new Date(1977, 1, 21),new Date(1979, 0, 0)],
+        ['US House - 7','Vacant',new Date(1977, 0, 21),new Date(1977, 1, 20)],
+        ['US House - 7','Robert Bergland',new Date(1971, 0, 2),new Date(1977, 0, 20)],
+        ['US House - 7','Odin Langen',new Date(1963, 0, 2),new Date(1971, 0, 1)],
+        ['US House - 7','Herman Carl Anderson',new Date(1949, 0, 0),new Date(1963, 0, 1)],
+        ['US House - 8','Jim Oberstar',new Date(1975, 0, 2),new Date(1979, 0, 0)],
+        ['US House - 8','Vacant',new Date(1974, 11, 30),new Date(1975, 0, 1)],
+        ['US House - 8','John Blatnik',new Date(1949, 0, 0),new Date(1974, 11, 29)],
+        ]);
+
+    var options = {
+        timeline: { groupByRowLabel: true },
+        colors: ['#0000DD','#DDDDDD','#0000DD','#0000DD','#DD0000', // us senator 1
+        '#0000DD','#0000DD', // us senator 1
+        '#0000DD','#DD0000','#0000DD','#DD0000','#0000DD','#DD0000','#DD0000', // gov
+        '#0000DD','#DD0000','#0000DD','#DD0000','#DD0000', // lt. gov
+        '#0000DD','#DD0000','#0000DD','#DD0000','#DDDDDD','#DD0000', // sec of state
+        '#0000DD','#DD0000','#0000DD','#0000DD','#DD0000', // ag
+        '#DD0000','#DD0000','#DD0000', // auditor
+        '#0000DD','#DD0000','#0000DD','#DD0000', // treasurer
+        '#DD0000','#DD0000', // us house, 1
+        '#DD0000','#DD0000','#DD0000', // us house, 2
+        '#DD0000','#0000DD', // us house, 3
+        '#0000DD','#0000DD', // us house, 4
+        '#0000DD','#DD0000', // us house, 5
+        '#0000DD','#DD0000','#0000DD', // us house, 6
+        '#DD0000','#0000DD','#DD0000','#DD0000', // us house, 7
+        '#0000DD','#0000DD' // us house, 8
+        ],
+
+    {% elif year == '1919' %}
+        ['US Senator - 1','Edward John Thye', new Date(1947, 0, 2),new Date(1949, 0, 0)],
+        ['US Senator - 1','Henrik Shipstead', new Date(1923, 2, 3),new Date(1947, 0, 1)],
+        ['US Senator - 1','Frank Kellogg', new Date(1919, 0, 0),new Date(1923, 2, 2)],
+        ['US Senator - 2','Joseph Ball', new Date(1943, 0, 2),new Date(1949, 0, 1)],
+        ['US Senator - 2','Arthur Nelson', new Date(1942, 10, 17),new Date(1943, 0, 1)],
+        ['US Senator - 2','Vacant', new Date(1942, 10, 2),new Date(1942, 10, 16)],
+        ['US Senator - 2','Joseph Ball', new Date(1940, 9, 13),new Date(1942, 10, 1)],
+        ['US Senator - 2','Vacant', new Date(1940, 7, 30),new Date(1940, 9, 12)],
+        ['US Senator - 2','Ernest Lundeen', new Date(1937, 0, 2),new Date(1940, 7, 29)],
+        ['US Senator - 2','Guy Howard', new Date(1936, 10, 3),new Date(1937, 0, 1)],
+        ['US Senator - 2','Elmer Benson', new Date(1935, 11, 26),new Date(1936, 10, 2)],
+        ['US Senator - 2','Vacant', new Date(1935, 11, 21),new Date(1935, 11, 25)],
+        ['US Senator - 2','Thomas Schall', new Date(1925, 2, 3),new Date(1935, 11, 20)],
+        ['US Senator - 2','Magnus Johnson', new Date(1923, 6, 15),new Date(1925, 2, 2)],
+        ['US Senator - 2','Vacant', new Date(1923, 3, 27),new Date(1923, 6, 14)],
+        ['US Senator - 2','Knute Nelson', new Date(1919, 0, 0),new Date(1923, 3, 27)],
+        ['Governor','Luther Youngdahl',new Date(1947, 0, 7),new Date(1949, 0, 0)],
+        ['Governor','Edward John Thye',new Date(1943, 3, 26),new Date(1947, 0, 6)],
+        ['Governor','Harold Stassen',new Date(1939, 0, 1),new Date(1943, 3, 25)],
+        ['Governor','Elmer Benson',new Date(1937, 0, 3),new Date(1939, 0, 0)],
+        ['Governor','Hjalmar Petersen',new Date(1936, 7, 21),new Date(1937, 0, 2)],
+        ['Governor','Floyd Olson',new Date(1931, 0, 5),new Date(1936, 7, 20)],
+        ['Governor','Theodore Christianson',new Date(1925, 0, 5),new Date(1931, 0, 4)],
+        ['Governor','J.A.O. Preus',new Date(1921, 0, 4),new Date(1925, 0, 4)],
+        ['Governor','J.A.A. Burnquist',new Date(1919, 0, 0),new Date(1921, 0, 3)],
+        ['Lt. Governor','C. Elmer Anderson',new Date(1945, 0, 1),new Date(1949, 0, 0)],
+        ['Lt. Governor','Archie Miller',new Date(1943, 3, 26),new Date(1945, 0, 0)],
+        ['Lt. Governor','Edward John Thye',new Date(1943, 0, 3),new Date(1943, 3, 25)],
+        ['Lt. Governor','C. Elmer Anderson',new Date(1939, 0, 1),new Date(1943, 0, 2)],
+        ['Lt. Governor','Gottfrid Lindsten',new Date(1937, 0, 4),new Date(1939, 0, 0)],
+        ['Lt. Governor','William Richardson',new Date(1936, 7, 23),new Date(1937, 0, 3)],
+        ['Lt. Governor','Hjalmar Petersen',new Date(1935, 0, 7),new Date(1936, 7, 22)],
+        ['Lt. Governor','Konrad Solberg',new Date(1933, 0, 2),new Date(1935, 0, 6)],
+        ['Lt. Governor','Henry Arens',new Date(1931, 0, 5),new Date(1933, 0, 1)],
+        ['Lt. Governor','Charles Adams',new Date(1929, 5, 24),new Date(1931, 0, 4)],
+        ['Lt. Governor','William Nolan',new Date(1925, 0, 5),new Date(1929, 5, 23)],
+        ['Lt. Governor','Louis Collins',new Date(1921, 0, 3),new Date(1925, 0, 2)],
+        ['Lt. Governor','Thomas Frankson',new Date(1919, 0, 0),new Date(1921, 0, 2)],
+        ['Secretary of State','Mike Holm',new Date(1921, 0, 3),new Date(1949, 0, 0)],
+        ['Secretary of State','Julius Schmahl',new Date(1919, 0, 0),new Date(1921, 0, 2)],
+        ['Attorney General','J.A.A. Burnquist',new Date(1939, 0, 3),new Date(1949, 0, 0)],
+        ['Attorney General','William Ervin',new Date(1936, 11, 14),new Date(1939, 0, 2)],
+        ['Attorney General','Harry Peterson',new Date(1933, 0, 2),new Date(1936, 11, 13)],
+        ['Attorney General','Henry Benson',new Date(1929, 10, 19),new Date(1933, 0, 1)],
+        ['Attorney General','G. A. Youngquist',new Date(1928, 1, 1),new Date(1929, 10, 18)],
+        ['Attorney General','Albert Pratt',new Date(1927, 11, 20),new Date(1928, 1, 0)],
+        ['Attorney General','Clifford Hilton',new Date(1919, 0, 0),new Date(1927, 11, 19)],
+        ['Auditor','Stafford King',new Date(1931, 0, 5),new Date(1949, 0, 0)],
+        ['Auditor','Ray Chase',new Date(1921, 0, 1),new Date(1931, 0, 4)],
+        ['Auditor','J.A.O. Preus',new Date(1919, 0, 0),new Date(1921, 0, 0)],
+        ['Treasurer','Julius Schmahl',new Date(1939, 0, 1),new Date(1949, 0, 0)],
+        ['Treasurer','C.A. Halverson',new Date(1937, 0, 4),new Date(1939, 0, 0)],
+        ['Treasurer','Julius Schmahl',new Date(1927, 0, 3),new Date(1937, 0, 3)],
+        ['Treasurer','Edward Stark',new Date(1925, 6, 0),new Date(1927, 0, 2)],
+        ['Treasurer','Henry Rines',new Date(1919, 0, 0),new Date(1925, 5, 29)],
+        ['US House - 1','August Andresen',new Date(1935, 0, 2),new Date(1949, 0, 0)],
+        ['US House - 1','Inactive - All Seats At-Large',new Date(1933, 2, 3),new Date(1935, 0, 1)],
+        ['US House - 1','Victor Christgau',new Date(1929, 2, 3),new Date(1933, 2, 2)],
+        ['US House - 1','Allen Furlow',new Date(1925, 2, 3),new Date(1929, 2, 2)],
+        ['US House - 1','Sydney Anderson',new Date(1919, 0, 0),new Date(1925, 2, 2)],
+        ['US House - 2',"Joseph O'Hara",new Date(1941, 0, 2),new Date(1949, 0, 0)],
+        ['US House - 2',"Elmer Ryan",new Date(1935, 0, 2),new Date(1941, 0, 1)],
+        ['US House - 2','Inactive - All Seats At-Large',new Date(1933, 2, 3),new Date(1935, 0, 1)],
+        ['US House - 2','Frank Clague',new Date(1921, 2, 3),new Date(1933, 2, 2)],
+        ['US House - 2','Franklin Ellsworth',new Date(1919, 0, 0),new Date(1921, 2, 2)],
+        ['US House - 3','George MacKinnon',new Date(1947, 0, 2),new Date(1949, 0, 1)],
+        ['US House - 3','Vacant',new Date(1946, 7, 12),new Date(1947, 0, 1)],
+        ['US House - 3','William Gallagher',new Date(1945, 0, 2),new Date(1946, 7, 11)],
+        ['US House - 3','Richard Pillsbury Gale',new Date(1941, 0, 2),new Date(1945, 0, 1)],
+        ['US House - 3','John Alexander',new Date(1939, 0, 2),new Date(1941, 0, 1)],
+        ['US House - 3','Henry Teigan',new Date(1937, 0, 2),new Date(1939, 0, 1)],
+        ['US House - 3','Ernest Lundeen',new Date(1935, 0, 2),new Date(1937, 0, 1)],
+        ['US House - 3','Inactive - All Seats At-Large',new Date(1933, 2, 3),new Date(1935, 0, 1)],
+        ['US House - 3','August Andresen',new Date(1925, 2, 3),new Date(1933, 2, 2)],
+        ['US House - 3','Charles Russell Davis',new Date(1919, 0, 0),new Date(1925, 2, 2)],
+        ['US House - 4','Edward Devitt',new Date(1947, 0, 2),new Date(1949, 0, 1)],
+        ['US House - 4','Frank Starkey',new Date(1945, 0, 2),new Date(1947, 0, 1)],
+        ['US House - 4','Melvin Maas',new Date(1935, 0, 2),new Date(1945, 0, 1)],
+        ['US House - 4','Inactive - All Seats At-Large',new Date(1933, 2, 3),new Date(1935, 0, 1)],
+        ['US House - 4','Melvin Maas',new Date(1927, 2, 3),new Date(1933, 2, 2)],
+        ['US House - 4','Oscar Keller',new Date(1919, 6, 0),new Date(1927, 2, 2)],
+        ['US House - 4','Vacant',new Date(1919, 4, 19),new Date(1919, 5, 29)],
+        
+        ['US House - 5','Walter Judd',new Date(1943, 0, 2),new Date(1949, 0, 0)],
+        ['US House - 5','Oscar Youngdahl',new Date(1939, 0, 2),new Date(1943, 0, 1)],
+        ['US House - 5','Dewey Johnson',new Date(1937, 0, 2),new Date(1939, 0, 1)],
+        ['US House - 5','Theodore Chrisianson',new Date(1935, 0, 2),new Date(1937, 0, 1)],
+        ['US House - 5','Inactive - All Seats At-Large',new Date(1933, 2, 3),new Date(1935, 0, 1)],
+        ['US House - 5','William Nolan',new Date(1929, 6, 16),new Date(1933, 2, 2)],
+        ['US House - 5','Vacant',new Date(1929, 5, 29),new Date(1929, 6, 15)],
+        ['US House - 5','Walter Newton',new Date(1919, 2, 3),new Date(1929, 5, 28)],
+        ['US House - 6','Harold Knutson',new Date(1935, 0, 2),new Date(1949, 0, 1)],
+        ['US House - 6','Inactive - All Seats At-Large',new Date(1933, 2, 3),new Date(1935, 0, 1)],
+        ['US House - 6','Harold Knutson',new Date(1919, 0, 0),new Date(1933, 2, 2)],
+        ['US House - 7','Herman Carl Anderson',new Date(1939, 0, 2),new Date(1949, 0, 0)],
+        ['US House - 7','Paul John Kvale',new Date(1935, 0, 2),new Date(1939, 0, 1)],
+        ['US House - 7','Inactive - All Seats At-Large',new Date(1933, 2, 3),new Date(1935, 0, 1)],
+        ['US House - 7','Paul John Kvale',new Date(1929, 9, 15),new Date(1933, 2, 2)],
+        ['US House - 7','Vacant',new Date(1929, 8, 10),new Date(1929, 9, 14)],
+        ['US House - 7','Ole Kvale',new Date(1923, 2, 3),new Date(1929, 8, 9)],
+        ['US House - 7','Andrew Volstead',new Date(1919, 0, 0),new Date(1923, 2, 2)],
+        ['US House - 8','John Blatnik',new Date(1947, 0, 2),new Date(1949, 0, 0)],
+        ['US House - 8','Willaim Pittenger',new Date(1939, 0, 2),new Date(1947, 0, 1)],
+        ['US House - 8','John Bernard',new Date(1937, 0, 2),new Date(1939, 0, 0)],
+        ['US House - 8','Willaim Pittenger',new Date(1935, 0, 2),new Date(1937, 0, 1)],
+        ['US House - 8','Inactive - All Seats At-Large',new Date(1933, 2, 3),new Date(1935, 0, 1)],
+        ['US House - 8','Willaim Pittenger',new Date(1929, 2, 3),new Date(1933, 2, 2)],
+        ['US House - 8','Willaim Leighton Carss',new Date(1925, 2, 3),new Date(1929, 2, 2)],
+        ['US House - 8','Oscar Larson',new Date(1921, 2, 3),new Date(1925, 2, 2)],
+        ['US House - 8','Willaim Leighton Carss',new Date(1919, 2, 3),new Date(1921, 2, 2)],
+        
+        ]);
+
+        var options = {
+        timeline: { groupByRowLabel: true },
+        colors: ['#DD0000','#DDDD00','#DD0000', // us senator 1
+        '#DD0000','#DD0000','#DDDDDD','#44DD44','#DD0000','#44DD44','#DD0000','#44DD44','#DD0000', // us senator 2
+        '#DD0000','#DD0000','#44DD44','#44DD44','#DD0000','#DD0000','#DD0000', // gov
+        '#DD0000','#DD0000','#44DD44','#DD0000','#44DD44','#44DD44','#DD0000','#DD0000','#DD0000','#DD0000', // lt. gov
+        '#DD0000','#DD0000', // sec of state
+        '#44DD44','#44DD44','#DD0000','#DD0000','#DD0000','#DD0000', // ag
+        '#DD0000','#DD0000', // auditor
+        '#44DD44','#DD0000','#DD0000', // treasurer
+        '#DD0000','#DDDDDD','#DD0000','#DD0000','#DD0000', // us house, 1
+        '#DD0000','#0000DD','#DD0000','#DD0000', // us house, 2
+        '#DD0000','#0000DD','#DD0000','#DD0000','#44DD44','#DD0000', // us house, 3
+        '#DD0000','#0000DD','#DD0000','#DD0000', // us house, 4
+        '#DD0000','#DD0000','#44DD44','#DD0000','#DD0000','#DD0000', // us house, 5
+        '#DD0000', // us house, 6
+        '#44DD44','#44DD44','#DD0000', // us house, 7
+        '#0000DD','#DD0000','#44DD44','#44DD44','#DD0000','#DD0000', // us house, 8
+        ],
+
+    {% elif year == '1890' %}
+
+        ['US Senator - 1','Frank Kellogg', new Date(1917, 2, 3),new Date(1919, 0, 0)],
+        ['US Senator - 1','Moses Clapp', new Date(1901, 0, 22),new Date(1917, 2, 2)],
+        ['US Senator - 1','Charles Towne', new Date(1900, 11, 4),new Date(1901, 0, 21)],
+        ['US Senator - 1','Vacant', new Date(1900, 10, 26),new Date(1900, 11, 3)],
+        ['US Senator - 1','Cushman Davis', new Date(1890, 0, 0),new Date(1900, 10, 25)],
+        ['US Senator - 2','Knute Nelson', new Date(1895, 2, 3),new Date(1919, 0, 0)],
+        ['US Senator - 2','William Washburn', new Date(1890, 0, 0),new Date(1895, 2, 2)],
+        ['Governor','J.A.A. Burnquist',new Date(1915, 11, 29),new Date(1919, 0, 0)],
+        ['Governor','Winfield Hammond',new Date(1915, 0, 4),new Date(1915, 11, 28)],
+        ['Governor','Adolph Eberhart',new Date(1909, 8, 20),new Date(1915, 0, 3)],
+        ['Governor','John Johnson',new Date(1905, 0, 3),new Date(1909, 8, 19)],
+        ['Governor','Samuel Van Sant',new Date(1901, 0, 6),new Date(1905, 0, 2)],
+        ['Governor','John Lind',new Date(1899, 0, 1),new Date(1901, 0, 5)],
+        ['Governor','David Clough',new Date(1895, 0, 30),new Date(1899, 0, 0)],
+        ['Governor','Knute Nelson',new Date(1893, 0, 3),new Date(1895, 0, 29)],
+        ['Governor','William Merriam',new Date(1890, 0, 0),new Date(1893, 0, 2)],
+        ['Lt. Governor','Thomas Frankson',new Date(1917, 0, 1),new Date(1919, 0, 0)],
+        ['Lt. Governor','George Sullivan',new Date(1916, 9, 27),new Date(1917, 0, 0)],
+        ['Lt. Governor','J.A.A. Burnquist',new Date(1913, 0, 6),new Date(1916, 9, 26)],
+        ['Lt. Governor','Samuel Gordon',new Date(1911, 0, 2),new Date(1913, 0, 5)],
+        ['Lt. Governor','Edward Smith',new Date(1909, 8, 24),new Date(1911, 0, 1)],
+        ['Lt. Governor','Adolph Eberhart',new Date(1907, 0, 6),new Date(1909, 8, 23)],
+        ['Lt. Governor','Ray Jones',new Date(1903, 0, 4),new Date(1907, 0, 5)],
+        ['Lt. Governor','Lyndon Smith',new Date(1899, 0, 2),new Date(1903, 0, 3)],
+        ['Lt. Governor','John Gibbs',new Date(1897, 0, 4),new Date(1899, 0, 1)],
+        ['Lt. Governor','Frank Day',new Date(1895, 0, 30),new Date(1897, 0, 3)],
+        ['Lt. Governor','David Clough',new Date(1893, 0, 2),new Date(1895, 0, 29)],
+        ['Lt. Governor','Gideon Ives',new Date(1891, 0, 4),new Date(1893, 0, 1)],
+        ['Lt. Governor','Albert Rice',new Date(1890, 0, 0),new Date(1891, 0, 3)],
+        ['Secretary of State','Julius Schmahl',new Date(1907, 0, 6),new Date(1919, 0, 0)],
+        ['Secretary of State','Pener Hanson',new Date(1901, 0, 6),new Date(1907, 0, 5)],
+        ['Secretary of State','Albert Berg',new Date(1895, 0, 6),new Date(1901, 0, 5)],
+        ['Secretary of State','Frederick Brown',new Date(1891, 0, 4),new Date(1895, 0, 5)],
+        ['Secretary of State','Hans Mattson',new Date(1890, 0, 0),new Date(1891, 0, 3)],
+        ['Attorney General','Clifford Hilton',new Date(1918, 2, 8),new Date(1919, 0, 0)],
+        ['Attorney General','Lyndon Smith',new Date(1912, 0, 1),new Date(1918, 2, 7)],
+        ['Attorney General','George Simpson',new Date(1909, 0, 3),new Date(1912, 0, 0)],
+        ['Attorney General','Edward Young',new Date(1905, 0, 1),new Date(1909, 0, 2)],
+        ['Attorney General','William Donahower',new Date(1904, 3, 0),new Date(1905, 0, 0)],
+        ['Attorney General','Wallace Douglas',new Date(1899, 0, 1),new Date(1904, 2, 27)],
+        ['Attorney General','Henry Childs',new Date(1893, 0, 1),new Date(1899, 0, 0)],
+        ['Attorney General','Moses Clapp',new Date(1890, 0, 0),new Date(1893, 0, 0)],
+        ['Auditor','J.A.O. Preus',new Date(1915, 0, 4),new Date(1919, 0, 0)],
+        ['Auditor','Samuel Iverson',new Date(1903, 0, 4),new Date(1915, 0, 3)],
+        ['Auditor','Robert Dunn',new Date(1895, 0, 6),new Date(1903, 0, 3)],
+        ['Auditor','Adolph Biermann',new Date(1891, 0, 4),new Date(1895, 0, 5)],
+        ['Auditor','William Braden',new Date(1890, 0, 0),new Date(1891, 0, 3)],
+        ['Treasurer','Henry Rines',new Date(1917, 0, 1),new Date(1919, 0, 0)],
+        ['Treasurer','A.C. Gooding',new Date(1916, 1, 13),new Date(1917, 0, 0)],
+        ['Treasurer','Walter Smith',new Date(1911, 0, 2),new Date(1916, 1, 12)],
+        ['Treasurer','E.S. Pettijohn',new Date(1910, 5, 7),new Date(1911, 0, 1)],
+        ['Treasurer','Clarence Dinehart',new Date(1907, 0, 6),new Date(1910, 5, 6)],
+        ['Treasurer','Julius Block',new Date(1901, 0, 6),new Date(1907, 0, 5)],
+        ['Treasurer','August Koerner',new Date(1895, 0, 6),new Date(1901, 0, 5)],
+        ['Treasurer','Joseph Bobleter',new Date(1890, 0, 0),new Date(1895, 0, 5)],
+        ['US House - 1','Sydney Anderson',new Date(1911, 2, 3),new Date(1919, 0, 0)],
+        ['US House - 1','James Albertus Tawney',new Date(1893, 2, 3),new Date(1911, 2, 2)],
+        ['US House - 1','Willaim Harries',new Date(1891, 2, 3),new Date(1893, 2, 2)],
+        ['US House - 1','Mark Dunnell',new Date(1890, 0, 0),new Date(1891, 2, 2)],
+        ['US House - 2','Franklin Ellsworth',new Date(1915, 2, 3),new Date(1919, 0, 0)],
+        ['US House - 2','Vacant',new Date(1915, 0, 5),new Date(1915, 2, 2)],
+        ['US House - 2','Winfield Hammond',new Date(1907, 2, 3),new Date(1915, 0, 4)],
+        ['US House - 2','James McCleary',new Date(1893, 2, 3),new Date(1907, 2, 2)],
+        ['US House - 2','John Lind',new Date(1890, 0, 0),new Date(1893, 2, 2)],
+        ['US House - 3','Charles Russell Davis',new Date(1903, 2, 3),new Date(1919, 0, 0)],
+        ['US House - 3','Joel Heatwole',new Date(1895, 2, 3),new Date(1903, 2, 2)],
+        ['US House - 3','Osee Hall',new Date(1891, 2, 3),new Date(1895, 2, 2)],
+        ['US House - 3','Darwin Hall',new Date(1890, 0, 0),new Date(1891, 2, 2)],
+        ['US House - 4','Carl Van Dyke',new Date(1915, 2, 3),new Date(1919, 4, 18)],
+        ['US House - 4','Frederick Stevens',new Date(1897, 2, 3),new Date(1915, 2, 2)],
+        ['US House - 4','Andrew Kiefer',new Date(1893, 2, 3),new Date(1897, 2, 2)],
+        ['US House - 4','James Castle',new Date(1891, 2, 3),new Date(1893, 2, 2)],
+        ['US House - 4','Samuel Snider',new Date(1890, 0, 0),new Date(1891, 2, 2)],
+        ['US House - 5','Ernest Lundeen',new Date(1917, 2, 3),new Date(1919, 2, 2)],
+        ['US House - 5','George Ross Smith',new Date(1913, 2, 3),new Date(1917, 2, 2)],
+        ['US House - 5','Frank Nye',new Date(1907, 2, 3),new Date(1913, 2, 2)],
+        ['US House - 5','Loren Fletcher',new Date(1905, 2, 3),new Date(1907, 2, 2)],
+        ['US House - 5','John Lind',new Date(1903, 2, 3),new Date(1905, 2, 2)],
+        ['US House - 5','Loren Fletcher',new Date(1893, 2, 3),new Date(1903, 2, 2)],
+        ['US House - 5','Kittel Halvorson',new Date(1891, 2, 3),new Date(1893, 2, 2)],
+        ['US House - 5','Solomon Comstock',new Date(1890, 0, 0),new Date(1891, 2, 2)],
+        ['US House - 6','Harold Knutson',new Date(1917, 2, 3),new Date(1919, 0, 0)],
+        ['US House - 6','Charles Lindbergh',new Date(1907, 2, 3),new Date(1917, 2, 2)],
+        ['US House - 6','Clarence Buckman',new Date(1903, 2, 3),new Date(1907, 2, 2)],
+        ['US House - 6','Robert Morris',new Date(1897, 2, 3),new Date(1903, 2, 2)],
+        ['US House - 6','Charles Towne',new Date(1895, 2, 3),new Date(1897, 2, 2)],
+        ['US House - 6','Melvin Baldwin',new Date(1893, 2, 3),new Date(1895, 2, 2)],
+        ['US House - 7','Andrew Volstead',new Date(1903, 2, 3),new Date(1919, 0, 0)],
+        ['US House - 7','Frank Eddy',new Date(1895, 2, 3),new Date(1903, 2, 2)],
+        ['US House - 7','Haldor Boen',new Date(1893, 2, 3),new Date(1895, 2, 2)],
+        ['US House - 8','Clarence Miller',new Date(1909, 2, 3),new Date(1919, 2, 2)],
+        ['US House - 8','James Bede',new Date(1903, 2, 3),new Date(1909, 2, 2)],
+        ]);
+
+        var options = {
+        timeline: { groupByRowLabel: true },
+        colors: ['#DD0000','#DD0000','#CC11CC','#DDDDDD','#DD0000',
+        '#DD0000','#DD0000',
+        '#DD0000','#0000DD','#DD0000','#0000DD','#DD0000','#0000DD','#DD0000','#DD0000',
+        '#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000',
+        '#DD0000','#DD0000','#DD0000','#DD0000','#DD0000',
+        '#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000',
+        '#DD0000','#DD0000','#DD0000','#DD0000','#DD0000',
+        '#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000',
+        '#DD0000','#0000DD','#DD0000', // us house, 1
+        '#DD0000','#DD0000', // us house, 2
+        '#DD0000','#DD0000','#0000DD','#DD0000', // us house, 3
+        '#0000DD','#DD0000','#DD0000','#0000DD','#DD0000', // us house, 4
+        '#DD0000','#DD0000','#DD0000','#DD0000','#00DD88','#DD0000', // us house, 5
+        '#DD0000','#DD0000','#DD0000','#DD0000','#0000DD', // us house, 6
+        '#DD0000','#DD0000','#00DD88', // us house, 7
+        '#DD0000','#DD0000', // us house, 8
+        ],
+
+    {% else %}
+
+        ['US Senator - 1','Cushman Davis', new Date(1887, 2, 3),new Date(1890, 0, 0)],
+        ['US Senator - 1','Samuel McMillian', new Date(1875, 2, 3),new Date(1887, 2, 2)],
+        ['US Senator - 1','Alexander Ramsey', new Date(1863, 2, 3),new Date(1875, 2, 2)],
+        ['US Senator - 1','Henry Rice', new Date(1858, 2, 10),new Date(1863, 2, 2)],
+        ['US Senator - 2','William Washburn', new Date(1889, 2, 3),new Date(1890, 0, 0)],
+        ['US Senator - 2','Dwight Sabin', new Date(1883, 2, 3),new Date(1889, 2, 2)],
+        ['US Senator - 2','William Windom', new Date(1881, 10, 4),new Date(1883, 2, 2)],
+        ['US Senator - 2','Vacant', new Date(1881, 9, 29),new Date(1881, 10, 3)],
+        ['US Senator - 2','Alonzo Edgerton', new Date(1881, 2, 11),new Date(1881, 9, 28)],
+        ['US Senator - 2','Vacant', new Date(1881, 2, 6),new Date(1881, 2, 10)],
+        ['US Senator - 2','William Windom', new Date(1871, 2, 3),new Date(1881, 2, 5)],
+        ['US Senator - 2','Ozora Stearns', new Date(1871, 0, 22),new Date(1871, 2, 2)],
+        ['US Senator - 2','William Windom', new Date(1870, 6, 14),new Date(1871, 0, 21)],
+        ['US Senator - 2','Vacant', new Date(1870, 6, 12),new Date(1870, 6, 13)],
+        ['US Senator - 2','Daniel Norton', new Date(1865, 2, 3),new Date(1870, 6, 11)],
+        ['US Senator - 2','Morton Wilkinson', new Date(1859, 2, 3),new Date(1865, 2, 2)],
+        ['US Senator - 2','James Shields', new Date(1858, 4, 10),new Date(1859, 2, 2)],
+        ['Governor','William Merriam',new Date(1889, 0, 3),new Date(1890, 0, 0)],
+        ['Governor','Andrew McGill',new Date(1887, 0, 4),new Date(1889, 0, 2)],
+        ['Governor','Lucius Hubbard',new Date(1882, 0, 9),new Date(1887, 0, 3)],
+        ['Governor','John Pillsbury',new Date(1876, 0, 6),new Date(1882, 0, 8)],
+        ['Governor','Cushman Davis',new Date(1874, 0, 6),new Date(1876, 0, 5)],
+        ['Governor','Horace Austin',new Date(1870, 0, 8),new Date(1874, 0, 5)],
+        ['Governor','William Marshall',new Date(1866, 0, 7),new Date(1870, 0, 7)],
+        ['Governor','Stephen Miller',new Date(1864, 0, 10),new Date(1866, 0, 6)],
+        ['Governor','Henry Swift',new Date(1863, 6, 9),new Date(1864, 0, 9)],
+        ['Governor','Alexander Ramsey',new Date(1860, 0, 1),new Date(1863, 6, 8)],
+        ['Governor','Henry Sibley',new Date(1858, 4, 23),new Date(1860, 0, 0)],
+        ['Lt. Governor','Albert Rice',new Date(1887, 0, 3),new Date(1890, 0, 0)],
+        ['Lt. Governor','Charles Gilman',new Date(1880, 0, 9),new Date(1887, 0, 2)],
+        ['Lt. Governor','James Wakefield',new Date(1876, 0, 6),new Date(1880, 0, 8)],
+        ['Lt. Governor','Alphonso Barto',new Date(1874, 0, 6),new Date(1876, 0, 5)],
+        ['Lt. Governor','William Yale',new Date(1870, 0, 8),new Date(1874, 0, 5)],
+        ['Lt. Governor','Thomas Armstrong',new Date(1866, 0, 7),new Date(1870, 0, 7)],
+        ['Lt. Governor','Charles Sherwood',new Date(1864, 0, 10),new Date(1866, 0, 6)],
+        ['Lt. Governor','Vacant',new Date(1863, 6, 9),new Date(1864, 0, 9)],
+        ['Lt. Governor','Henry Swift',new Date(1863, 2, 3),new Date(1863, 6, 8)],
+        ['Lt. Governor','Ignatius Donnelly',new Date(1860, 0, 1),new Date(1863, 2, 2)],
+        ['Lt. Governor','Willaim Holcombe',new Date(1858, 4, 23),new Date(1860, 0, 0)],
+        ['Secretary of State','Hans Mattson',new Date(1887, 0, 3),new Date(1890, 0, 0)],
+        ['Secretary of State','Fredrick Von Baubach',new Date(1880, 0, 9),new Date(1887, 0, 2)],
+        ['Secretary of State','John Irgens',new Date(1876, 0, 6),new Date(1880, 0, 8)],
+        ['Secretary of State','Samuel Jennison',new Date(1872, 0, 4),new Date(1876, 0, 5)],
+        ['Secretary of State','Hans Mattson',new Date(1870, 0, 6),new Date(1872, 0, 3)],
+        ['Secretary of State','Henry Rogers',new Date(1868, 0, 7),new Date(1870, 0, 5)],
+        ['Secretary of State','David Blakeley',new Date(1862, 10, 16),new Date(1868, 0, 6)],
+        ['Secretary of State','James Baker',new Date(1860, 0, 1),new Date(1862, 10, 16)],
+        ['Secretary of State','Francis Baasen',new Date(1858, 4, 23),new Date(1860, 0, 0)],
+        ['Attorney General','Moses Clapp',new Date(1887, 0, 4),new Date(1890, 0, 0)],
+        ['Attorney General','William Hahn',new Date(1881, 2, 10),new Date(1887, 0, 3)],
+        ['Attorney General','Charles Start',new Date(1880, 0, 9),new Date(1881, 2, 9)],
+        ['Attorney General','George Wilson',new Date(1874, 0, 8),new Date(1880, 0, 8)],
+        ['Attorney General','Francis Cornell',new Date(1868, 0, 9),new Date(1874, 0, 7)],
+        ['Attorney General','William Colville',new Date(1866, 0, 7),new Date(1868, 0, 8)],
+        ['Attorney General','Gordon Cole',new Date(1860, 0, 3),new Date(1866, 0, 6)],
+        ['Attorney General','Charles Berry',new Date(1858, 4, 23),new Date(1860, 0, 2)],
+        ['Auditor','William Braden',new Date(1882, 0, 9),new Date(1890, 0, 0)],
+        ['Auditor','Orlan Whitcomb',new Date(1873, 0, 12),new Date(1882, 0, 8)],
+        ['Auditor','Charles McIlrath',new Date(1861, 0, 0),new Date(1873, 0, 11)],
+        ['Auditor','William Dunbar',new Date(1858, 4, 23),new Date(1860, 11, 30)],
+        ['Treasurer','Joseph Bobleter',new Date(1887, 0, 4),new Date(1890, 0, 0)],
+        ['Treasurer','Charles Kittelson',new Date(1880, 0, 9),new Date(1887, 0, 3)],
+        ['Treasurer','William Pfaender',new Date(1876, 0, 6),new Date(1880, 0, 8)],
+        ['Treasurer','Edwin Dyke',new Date(1873, 1, 6),new Date(1876, 0, 5)],
+        ['Treasurer','William Seeger',new Date(1872, 0, 4),new Date(1873, 1, 5)],
+        ['Treasurer','Emil Munch',new Date(1868, 0, 9),new Date(1872, 0, 3)],
+        ['Treasurer','Charles Scheffer',new Date(1860, 0, 0),new Date(1868, 0, 8)],
+        ['Treasurer','George Armstrong',new Date(1858, 4, 23),new Date(1859, 11, 30)],
+        ['US House - 1','Mark Dunnell',new Date(1889, 2, 3),new Date(1890, 0, 0)],
+        ['US House - 1','Thomas Wilson',new Date(1887, 2, 3),new Date(1889, 2, 2)],
+        ['US House - 1','Milo White',new Date(1883, 2, 3),new Date(1887, 2, 2)],
+        ['US House - 1','Mark Dunnell',new Date(1871, 2, 3),new Date(1883, 2, 2)],
+        ['US House - 1','Morton Wilkinson',new Date(1869, 2, 3),new Date(1871, 2, 2)],
+        ['US House - 1','William Windom',new Date(1863, 2, 3),new Date(1869, 2, 2)],
+        ['US House - 1','Cyrus Aldrich',new Date(1861, 2, 3),new Date(1863, 2, 2)],
+        ['US House - 2','John Lind',new Date(1887, 2, 3),new Date(1890, 0, 0)],
+        ['US House - 2','James Wakefield',new Date(1883, 2, 3),new Date(1887, 2, 2)],
+        ['US House - 2','Horace Strait',new Date(1881, 2, 3),new Date(1883, 2, 2)],
+        ['US House - 2','Henry Poehler',new Date(1879, 2, 3),new Date(1881, 2, 2)],
+        ['US House - 2','Horace Strait',new Date(1873, 2, 3),new Date(1879, 2, 2)],
+        ['US House - 2','John Averill',new Date(1871, 2, 3),new Date(1873, 2, 2)],
+        ['US House - 2','Eugene Wilson',new Date(1869, 2, 3),new Date(1871, 2, 2)],
+        ['US House - 2','Ignatius Donnelly',new Date(1863, 2, 3),new Date(1869, 2, 2)],
+        ['US House - 2','William Windom',new Date(1861, 2, 3),new Date(1863, 2, 2)],
+        ['US House - 3','Darwin Hall',new Date(1889, 2, 3),new Date(1890, 0, 0)],
+        ['US House - 3','John MacDonald',new Date(1887, 2, 3),new Date(1889, 2, 2)],
+        ['US House - 3','Horace Strait',new Date(1883, 2, 3),new Date(1887, 2, 2)],
+        ['US House - 3','William Washburn',new Date(1879, 2, 3),new Date(1883, 2, 2)],
+        ['US House - 3','Jacob Stewart',new Date(1877, 2, 3),new Date(1879, 2, 2)],
+        ['US House - 3','William King',new Date(1875, 2, 3),new Date(1877, 2, 2)],
+        ['US House - 3','John Averill',new Date(1873, 2, 3),new Date(1875, 2, 2)],
+        ['US House - 4','Samuel Snider',new Date(1889, 2, 3),new Date(1890, 0, 0)],
+        ['US House - 4','Edmund Rice',new Date(1887, 2, 3),new Date(1889, 2, 2)],
+        ['US House - 4','John Gilfillan',new Date(1885, 2, 3),new Date(1887, 2, 2)],
+        ['US House - 4','William Washburn',new Date(1883, 2, 3),new Date(1885, 2, 2)],
+        ['US House - 5','Solomon Comstock',new Date(1889, 2, 3),new Date(1890, 0, 0)],
+        ['US House - 5','Knute Nelson',new Date(1883, 2, 3),new Date(1889, 2, 2)],
+        ]);
+
+        var options = {
+        timeline: { groupByRowLabel: true },
+        colors: ['#DD0000','#DD0000','#DD0000','#0000DD',
+        '#DD0000','#DD0000','#DD0000','#DDDDDD','#DD0000','#DD0000','#DD0000','#DD0000','#0000DD',
+        '#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#0000DD',
+        '#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#0000DD',
+        '#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#0000DD','#0000DD',
+        '#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#0000DD',
+        '#DD0000','#DD0000','#DD0000','#0000DD',
+        '#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#DD0000','#0000DD',
+        '#DD0000','#0000DD','#DD0000','#DD0000', // us house, 1
+        '#0000DD','#DD0000','#0000DD','#DD0000','#0000DD', // us house, 2
+        '#DD0000','#0000DD','#DD0000','#DD0000','#DD0000', // us house, 3
+        '#0000DD','#DD0000', // us house, 4
+        '#DD0000','#DD0000' // us house, 5
+        ],
+
+    {% endif %}
+
+    width:'100%',
+    height:'100%',
+    style:'box',
+    moveable: true,
+    zoomable: true,
+  };
+
+  chart.draw(dataTable,options);
+}
+</script>
+
+  
+<div id='front-dashboard-container'>
+
+	<h1>Minnesota Electoral History</h1><h2>{% if year == '1850' %}Statehood-1889{% elif year == '1890' %}1890-1918{% elif year == '1919' %}1919-1948{% elif year == '1949' %}1949 - 1978{% else %}1979 - Present{% endif %}</h2><br><br>
+
+  <div id='history-year-selection'>{% if year == '1850' %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/history/1850">Statehood-1889</a></div>{% if year == '1890' %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/history/1890">1890-1918</a></div>{% if year == '1919' %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/history/1919">1919-1948</a></div>{% if year == '1949' %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/history/1949">1949-1978</a></div>{% if year == '1979' %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/history/1979">1979-Present</a></div>
+  </div>
+
+  {% if year == '1850' %}
+    <div id='history-key'>
+        <div id="dfl-key" class="generic-key"></div>Democratic<br>
+        <div id="gop-key" class="generic-key"></div>Republican<br>
+        <div id="vacant-key" class="generic-key"></div>Vacant<br>
+    </div>
+  {% elif year == '1890' %}
+    <div id='history-key'>
+        <div id="dfl-key" class="generic-key"></div>Democratic<br>
+        <div id="gop-key" class="generic-key"></div>Republican<br>
+        <div id="pop-key" class="generic-key"></div>Populist<br>
+        <div id="d-r-key" class="generic-key"></div>Republican then Democratic<br>
+        <div id="vacant-key" class="generic-key"></div>Vacant<br>
+    </div>
+
+  {% elif year == '1919' %}
+    <div id='history-key'>
+        <div id="dfl-key" class="generic-key"></div>Democratic<br>
+        <div id="gop-key" class="generic-key"></div>Republican<br>
+        <div id="ip-key" class="generic-key"></div>Farmer Labor<br>
+        <div id="flr-key" class="generic-key"></div>Farmer Labor then Republican<br>
+        <div id="vacant-key" class="generic-key"></div>Vacant/Inactive<br>
+    </div>
+
+  {% elif year == '1949' %}
+    <div id='history-key'>
+        <div id="dfl-key" class="generic-key"></div>Democratic-Farmer-Labor<br>
+        <div id="gop-key" class="generic-key"></div>Republican<br>
+        <div id="vacant-key" class="generic-key"></div>Vacant<br>
+    </div>
+
+  {% else %}
+    <div id='history-key'>
+        <div id="dfl-key" class="generic-key"></div>Democratic-Farmer-Labor<br>
+        <div id="gop-key" class="generic-key"></div>Republican<br>
+        <div id="ip-key" class="generic-key"></div>Reform/Independance<br>
+        <div id="vacant-key" class="generic-key"></div>Vacant<br>
+    </div>
+    {% endif %}
+	<div id="timeline_div" class="google-timeline-chart" style="width: 775px; height: 725px;">
+	</div>
+    
+</div>
+{% endblock %}

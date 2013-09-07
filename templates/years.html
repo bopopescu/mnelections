@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Name', 'Votes'],
+          {% for d in data %}
+          	{% if d.party_id == 'DFL' %}
+          		['{{d['candidate_name']}}',{{d['percent_votes']|int()}}],
+          	{% endif %}
+          	{% if d.party_id == 'R' %}
+          		['{{d['candidate_name']}}',{{d['percent_votes']|int()}}],
+          	{% endif %}
+          {% endfor %}
+        ]);
+
+        var options = {
+          title: '{{year}} {{office}} Vote %',
+          legend: {position: 'none'},
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('{{year}}_chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    
+  </body>
+
+<div id='front-dashboard-container'>
+
+	<h1>Minnesota Elections</h1><h2>{{year}}</h2><br><br>
+	<div id="years-tabs">
+	  	{% for y in years %}
+	    	<div class='years-tabs-tab'><a href="/statewide/{{y}}">{{y}}</a></div>
+	    {% endfor %}
+	</div>
+	<div id='office-selection'>
+		{% for o in office_names %}<div class='office-tabs-tab'><a href="/statewide/{{year}}/{{o[0]}}">{{o[1]}}</a></div>{% endfor %}<div class='office-tabs-tab'><a href="/statewide/{{year}}/ushouse">US House<a/></div>{% if offices.senate == True %}<div class='office-tabs-tab'><a href="/statewide/{{year}}/senate">State Senate</a></div>{% endif %}<div class='office-tabs-tab'><a href="/statewide/{{year}}/house">State House</a></div>
+	</div>
+	<div id="chart-area">
+		<div id="{{year}}_chart_div" class="google-chart" style="width: 300px; height:275px;"></div>
+		<div class='vote-table'><table><tr><td>Candidate</td><td>Votes</td><td>%</td></tr>
+			{% for d in data %}
+          		<tr><td width="250px">{{d['candidate_name']}}</td><td>{{d['candidate_votes']}}</td><td>{{d['percent_votes'][:5]}}</td></tr>
+          	{% endfor %}</table>
+		</div>
+	</div>
+</div>
+{% endblock %}

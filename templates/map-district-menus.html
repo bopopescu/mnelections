@@ -1,0 +1,62 @@
+{% if district_map == 'house' or district_map == 'senate' %}
+<link rel="stylesheet" type="text/css" media="screen" href="/static/als_style.css" />
+<!-- <script type="text/javascript" src="/js/jquery-1.7.2.min.js"></script> -->
+<script type="text/javascript" src="/js/jquery.als-1.1.min.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#map-district-tabs").als({
+			visible_items: 20,
+			scrolling_items: 20,
+			orientation: "horizontal",
+			circular: "no",
+			autoscroll: "no",
+			{% if district_map == 'house' %}
+				{% if dist_num > 114 %}
+				start_from: {{dist_num-(20-(134-dist_num))}},
+				{% else %}
+				start_from: {{dist_num-1}},
+				{% endif %}
+			{% else %}
+				{% if dist_num > 47 %}
+				start_from: {{dist_num-(20-(67-dist_num))}},
+				{% else %}
+				start_from: {{dist_num-1}},
+				{% endif %}
+			{% endif %}
+		});
+	});	
+</script>
+{% endif %}
+
+<div id='map-office-selection'>
+	{% if district_map == 'ushouse' %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/maps/ushouse">US House</a></div>{% if district_map == 'senate' %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/maps/senate">State Senate</a></div>{% if district_map == 'house' %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/maps/house">State House</a></div>
+</div>
+
+{% if district_map == 'ushouse' %}
+	<div id='map-district-tabs'>
+	{% for r in range %}{% if r == dist_num %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/maps/ushouse/{{r}}">{{r}}</a></div>{% endfor %}
+	</div>
+{% endif %}
+{% if district_map == 'house' %}
+	<div class='als-container' id='map-district-tabs'>
+		<span class="als-prev"><img src="/static/thin_left_arrow_333.png" alt="prev" title="previous" /></span>
+		<div class="als-viewport">
+			 <ul class="als-wrapper">
+	{% for r in range %}<li class="als-item">{% if r == dist_num %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/maps/house/{{(loop.index / 2)|round|int}}{{ loop.cycle('A', 'B') }}">{{(loop.index / 2)|round|int}}{{ loop.cycle('A', 'B') }}</a></div></li>{% endfor %}
+			</ul>
+		</div>
+		<span class="als-next"><img src="/static/thin_right_arrow_333.png" alt="next" title="next" /></span> <!-- "next" button -->
+	</div>
+{% endif %}
+{% if district_map == 'senate' %}
+	<div class='als-container' id='map-district-tabs'>
+		<span class="als-prev"><img src="/static/thin_left_arrow_333.png" alt="prev" title="previous" /></span>
+		<div class="als-viewport">
+			 <ul class="als-wrapper">
+	{% for r in range %}<li class="als-item">{% if r == dist_num %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/maps/senate/{{loop.index}}">{{loop.index}}</a></div></li>{% endfor %}
+	</ul>
+		</div>
+		<span class="als-next"><img src="/static/thin_right_arrow_333.png" alt="next" title="next" /></span> <!-- "next" button -->
+	</div>
+{% endif %}

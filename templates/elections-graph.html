@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script type="text/javascript">
+	google.load("visualization", "1", {packages:["corechart"]});
+	google.setOnLoadCallback(drawChart);
+	function drawChart() {
+	    var data = google.visualization.arrayToDataTable([
+	    {% if ip_present=='1' %}
+	    ['Year', 'DFL', 'GOP', 'IP'],
+	    {% for r in results %}
+	    ['{{r[0]}}',{{r[1]|int()}},{{r[2]|int()}},{{r[3]|int()}}],
+	    {% endfor %}
+	    {% else %}
+	    ['Year', 'DFL', 'GOP'],
+	    {% for r in results %}
+	    ['{{r[0]}}',{{r[1]|int()}},{{r[2]|int()}}],
+	    {% endfor %}
+	    {% endif %}
+	]);
+
+	var options = {
+	    title: '{{title}}  {{results[0][0]}} - {{results[-1][0]}}',
+	    titlePosition: 'out',
+	    titleTextStyle: { fontSize: 18, },
+	    chartArea: {width: '70%', height: '75%'},
+	    // trendlines: {0: {type: 'linear',}},
+	};
+
+	var chart = new google.visualization.LineChart(document.getElementById('graph_chart_div'));
+	    chart.draw(data, options);
+	}
+</script>
+
+<div id='front-dashboard-container'>
+  	<h1>Minnesota General Elections Graph</h1>
+  	<br><br>
+	<div id="graph-area">
+		<div id="graph-selections">
+			<form name="graph" action="/graph/c" method="get">
+				<h3>Select Office</h3><br>
+				<input type="radio" name="office" value="president" {% if office=='president' %}checked{% endif %}> President<br>
+				<input type="radio" name="office" value="ussenator1" {% if office=='ussenator1' %}checked{% endif %}> Senator 1<br>
+				<input type="radio" name="office" value="ussenator2" {% if office=='ussenator2' %}checked{% endif %}> Senator 2<br>
+				<input type="radio" name="office" value="governor" {% if office=='governor' %}checked{% endif %}> Governor<br>
+				<input type="radio" name="office" value="secretaryofstate" {% if office=='secretaryofstate' %}checked{% endif %}> Secretary of State<br>
+				<input type="radio" name="office" value="attorneygeneral" {% if office=='attorneygeneral' %}checked{% endif %}> Attorney General<br>
+				<input type="radio" name="office" value="auditor" {% if office=='auditor' %}checked{% endif %}> Auditor<br>
+				<input type="radio" name="office" value="ushouse" {% if office=='ushouse' %}checked{% endif %}> US House 
+				<select name='ushouse'>
+				  <option value="1" {% if ushouse_dist_id=='1' %}selected{% endif %}>1</option>
+				  <option value="2" {% if ushouse_dist_id=='2' %}selected{% endif %}>2</option>
+				  <option value="3" {% if ushouse_dist_id=='3' %}selected{% endif %}>3</option>
+				  <option value="4" {% if ushouse_dist_id=='4' %}selected{% endif %}>4</option>
+				  <option value="5" {% if ushouse_dist_id=='5' %}selected{% endif %}>5</option>
+				  <option value="6" {% if ushouse_dist_id=='6' %}selected{% endif %}>6</option>
+				  <option value="7" {% if ushouse_dist_id=='7' %}selected{% endif %}>7</option>
+				  <option value="8" {% if ushouse_dist_id=='8' %}selected{% endif %}>8</option>
+				</select><br>
+				<input type="radio" name="office" value="senate" {% if office=='senate' %}checked{% endif %}> Senate 
+				<select name='senate'>
+				{% for r in senate_range %}
+					<option value="{{loop.index}}" {% if loop.index == senate_dist_id|int() %}selected{% endif %}>{{loop.index}}</option>
+				{% endfor %}
+				</select><br>
+				<input type="radio" name="office" value="house" {% if office=='house' %}checked{% endif %}> House 
+				<select name='house'>
+				{% for r in house_range %}
+					<option value="{{(loop.index / 2)|round|int}}{{loop.cycle('A', 'B')}}" {% if loop.index == house_dist_id|int() %}selected{% endif %}>{{(loop.index / 2)|round|int}}{{loop.cycle('A', 'B')}}</option>
+				{% endfor %}
+				</select>
+				<br><br>
+				<h3>Select return value</h3><br>
+				<input type="radio" name="style" value="raw" {% if style=='raw' %}checked{% endif %}> Raw votes<br>
+				<input type="radio" name="style" value="percent" {% if style=='percent' %}checked{% endif %}> Vote %<br><br>
+				<input type="submit" value="Submit">
+			</form>
+		</div>
+		<div id="graph_chart_div"></div>
+	</div>
+</div>
+{% endblock %}

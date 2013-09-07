@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script type="text/javascript">
+	google.load("visualization", "1", {packages:['corechart','table']});
+	google.setOnLoadCallback(drawVisualization);
+
+	function drawVisualization() {
+		{% if active == 'governor' %}
+		var queryAve = new google.visualization.Query('https://docs.google.com/spreadsheet/tq?range=J1%3AL20&key=0Ao3iZjz2mPXEdF81RnV0RzIxMGFzTWR1c2FBV0hId2c&gid=0&headers=1');
+  		var queryTable = new google.visualization.Query('https://docs.google.com/spreadsheet/tq?range=A1%3AH20&key=0Ao3iZjz2mPXEdF81RnV0RzIxMGFzTWR1c2FBV0hId2c&gid=0&headers=1');
+  		{% elif active == 'senator' %}
+  		var queryAve = new google.visualization.Query('https://docs.google.com/spreadsheet/tq?range=J1%3AL20&key=0Ao3iZjz2mPXEdF81RnV0RzIxMGFzTWR1c2FBV0hId2c&gid=1&headers=1');
+  		var queryTable = new google.visualization.Query('https://docs.google.com/spreadsheet/tq?range=A1%3AH20&key=0Ao3iZjz2mPXEdF81RnV0RzIxMGFzTWR1c2FBV0hId2c&gid=1&headers=1');
+  		{% endif %}
+
+  		queryAve.send(handleQueryAveResponse);
+		queryTable.send(handleQueryTableResponse);
+	}
+	
+	function handleQueryAveResponse(response) {
+		if (response.isError()) {
+			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+			return;
+		}
+
+		var data = response.getDataTable();         
+		var options = {vAxes:[{minValue:'40'}],
+						title: 'Rolling average [last 3 polls]',
+						width: '700',
+						height: '350',
+						backgroundColor: '#FFFFFF',
+						curveType:'function'
+					};
+		var chart = new google.visualization.LineChart(document.getElementById('ave_chart_div'));
+		chart.draw(data, options);
+	}
+
+	function handleQueryTableResponse(response) {
+		if (response.isError()) {
+			alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+			return;
+		}
+
+		var data = response.getDataTable();         
+		var options = {width: '650',
+						height: '200',
+						allowHtml: true,
+						sortColumn: 1,
+						sortAscending: false,
+					};
+		var chart = new google.visualization.Table(document.getElementById('polls_table_div'));
+		chart.draw(data, options);
+	}
+</script>
+
+<div id='front-dashboard-container'>
+	<h1>Minnesota 2014 Elections Polling</h1>
+
+	<div id='office-selection'>
+		{% if active == 'senator' %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="?polls=senator">US Senator<a/></div>{% if active == 'governor' %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="?polls=governor">Governor</a></div>
+	</div>
+	<h2 style='margin-bottom: 20px;'>{{title}}</h2>
+	<div id='polling-container'>
+		<div id="ave_chart_div"></div>
+		<div id="polls_table_div" class="google-front-table"></div>
+	</div>
+</div>
+{% endblock %}
+
+
+

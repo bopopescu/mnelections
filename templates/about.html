@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id='front-dashboard-container'>
+
+	<h1>Minnesota Elections Info</h1><h2>About page</h2><br><br>
+	<div id='about-text'>
+	<p><h1>Story</h1>
+		This project was born out of spending an inordinate amount of time on the Minnesota Secretary of States website looking at election results. If this is a thing you've done, you know how tedious it can be to navigate, not only between different races, but also between different years. 
+		<br><br>
+		The goal for this site is to provide a simple interface for quickly navigating between results in different years and races. As well as to provide a common sense and consistent url structure for easily locating election data.</p>
+		<p>
+		<h3>Explaination of URL Structure</h3><br>
+		The follwing table illustrates the url paths available. Values inside [] brackets indicates a range to choose from.
+		</p>
+		<table><tr><th>Base</th><th>Type</th><th>Year</th><th>Office</th><th>District</th></tr>
+			<tr><td rowspan="12">http://elections.left.mn/</td><td rowspan="6">general/</td><td rowspan="12">[2012-2000]/</td><td>president</td><td></td></tr>
+			<tr><td>ussenator1</td><td></td></tr>
+			<tr><td>ussenator2</td><td></td></tr>
+			<tr><td>governor</td><td></td></tr>
+			<tr><td>secretaryofstate</td><td></td></tr>
+			<tr><td>attorneygeneral</td><td></td></tr>
+			<tr><td rowspan="6">primary/</td><td>auditor</td><td></td></tr>
+			<tr><td>amendment1</td><td></td></tr>
+			<tr><td>amendment2</td><td></td></tr>
+			<tr><td>ushouse/</td><td>[1-8]</td></tr>
+			<tr><td>senate/</td><td>[1-67]</td></tr>
+			<tr><td>house/</td><td>[1A-67B]</td></tr>
+		</table>
+		<p>As an example, the path to the results of the 2012 8th district US House race would be:<br><br>
+			<a style="margin-left:25px;" href="http://elections.left.mn/general/2012/ushouse/8" target="_blank">http://elections.left.mn/general/2012/ushouse/8</a>
+		</p>
+	<p><h1>Data</h1>
+		Election results data comes from the <a href="http://www.sos.state.mn.us/index.aspx?page=137" target="_blank">Minnesota Secretary of State</a><br> 
+		History data comes primarily from the <a href="http://www.leg.state.mn.us/lrl/mngov/mngov.aspx" target="_blank">Minnesota Legislative Reference Library</a><br> 
+		Polling data is compiled by <a href="http://left.mn/" target="_blank">LeftMN</a>
+	</p>
+	<p>The code and design for the MN Elections Info site is copyrighted by LeftMN.<br>© 2013 LeftMN, all rights reserved.</p>
+	<br>
+	<p>If you have any comments, questions, ideas, or bugs to report, <a href="/feedback">you can do so here</a>.</p>
+	</div>
+	<br>
+</div>
+{% endblock %}

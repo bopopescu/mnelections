@@ -1,0 +1,31 @@
+<script type="text/javascript">
+  google.load("visualization", "1", {packages:["corechart","table"]});
+  google.setOnLoadCallback(drawChart);
+  
+  function drawChart() {
+    var chart_data = google.visualization.arrayToDataTable([
+      ['Name', '%'],
+      {% for d in data %}{% if d.percent_votes|int() > 5 %}['{{d['candidate_name']}}',{{d['percent_votes']|int()}}],{% endif %} {% endfor %}]);
+
+    var table_data = google.visualization.arrayToDataTable([
+        ['Candidate','Party','Votes','%'],
+        {% for d in data %}{% if d.candidate_votes|int() > 50 %}['{{d['candidate_name']}}','{{d['party_id']}}',{{d['candidate_votes']|int()}},'{{d['percent_votes'][:5]}}'],{% endif %}{% endfor %}]);
+    
+    var chart_options = {
+      title: '{{year}} {% if active == 'ushouse' %}CD{% endif %}{{office}} Vote %',
+      legend: {position: 'none'},
+      fontSize: 14,
+      vAxis: {maxValue: 80, minValue: 0},
+    };
+
+    var table_options = {title: '{{year}} {{office}}',
+            allowHtml: true,
+            fontSize: 14,
+          };
+
+    var chart = new google.visualization.ColumnChart(document.getElementById('{{year}}_chart_div'));
+    var table = new google.visualization.Table(document.getElementById('{{year}}_table_div'));
+    table.draw(table_data, table_options);
+    chart.draw(chart_data, chart_options);
+  };
+</script>

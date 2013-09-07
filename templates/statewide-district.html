@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% include 'graph-table-statewide-js.html' %}
+
+<div id='front-dashboard-container'>
+	<h1>Minnesota General Elections</h1><h2>{{year}} - {{office}} {{district_id}}</h2><br><br>
+	{% include 'menus.html' %}
+
+	<div id="chart-area">
+		
+		<div id="{{year}}_chart_div" class='google-bar-chart'style='width:275px; height:275px;'></div>
+
+    <div id="{{year}}_table_div" class='vote-table' style='width:375px; min-height:275px;'></div>
+	</div>
+	
+</div>
+{% endblock %}

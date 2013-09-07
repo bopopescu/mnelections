@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MN Elections Info</title>
+  <meta charset="utf-8">
+  
+  <meta name="keywords" content="minnesota, elections, politics, results, minnesota elections, minnesota elections results, minnesota election results, history, minnesota elections history" />
+  <meta name="description" content="Results of Elections in Minnesota 2000-Present" />  
+  <meta name="author" content="Tony Petrangelo, Left.MN" />
+	<link type="text/css" rel="stylesheet" href="/static/main.css" />
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31654740-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+{% if district_map %}
+<body  onload="initialize()">
+{% else %}
+<body>
+{% endif %}
+  {% include 'header.html' %}
+  <div id="content">
+    {% block content %}
+    {% endblock %}
+  </div>
+  {% include 'footer.html' %}
+</body>
+</html>
+

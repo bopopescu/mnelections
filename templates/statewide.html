@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% include 'graph-table-statewide-js.html' %}
+
+<div id='front-dashboard-container'>
+  <h1>Minnesota General Elections</h1><h2>{{year}} - {% if active == 'ushouse' %}US House, District {% endif %}{{office}}</h2><br><br>
+    {% include 'menus.html' %}
+
+	<div id="chart-area">
+		{% if amendment_text|length() > 0 %}
+    		<h3>{{amendment_text}}</h3>
+    	{% endif %}
+		<div id="{{year}}_chart_div" class='google-bar-chart'style='width:275px; height:275px;'></div>
+
+    <div id="{{year}}_table_div" class='vote-table' style='width:375px; min-height:275px;'></div>
+	</div>
+</div>
+{% endblock %}

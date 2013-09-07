@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% include 'graph-table-statewide-js.html' %}
+
+<div id='front-dashboard-container'>
+<h1>Minnesota General Elections</h1><h2>{{year}} - US House, District {{office}}</h2><br><br>
+	{% include 'menus.html' %}
+	<div id='house-district-tabs'>
+		{% for d in district_key %}
+		{% if office == d[1] %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/statewide/{{year}}/ushouse/{{d[1]}}">CD{{d[1]}}</a></div>
+		{% endfor %}
+	</div>
+	<div id="chart-area">
+		<div id="{{year}}_chart_div" class='google-bar-chart'style='width:275px; height:275px;'></div>
+
+    	<div id="{{year}}_table_div" class='vote-table' style='width:375px; min-height:275px;'></div>
+
+	</div>
+	
+</div>
+{% endblock %}

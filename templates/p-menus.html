@@ -1,0 +1,87 @@
+{% if active == 'house' or active == 'senate' %}
+{% if districts|length() > 18 %}
+<link rel="stylesheet" type="text/css" media="screen" href="/static/als_style.css" />
+<script type="text/javascript" src="/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/js/jquery.als-1.1.min.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#house-district-tabs").als({
+			visible_items: 17,
+			scrolling_items: 17,
+			orientation: "horizontal",
+			circular: "no",
+			autoscroll: "no",
+			{% if year|int() < 2006 %}
+				{% if active == 'house' %}
+					{% if (321-active_id|int()) < 17 %}
+					start_from: {{(active_id|int()-188)-(17-(134-(active_id|int()-188)))}},
+					{% else %}
+					start_from: {{active_id|int()-188}},
+					{% endif %}
+				{% else %}
+					{% if (187-active_id|int()) < 17 %}
+					start_from: {{(active_id|int()-121)-(17-(67-(active_id|int()-121)))}},
+					{% else %}
+					start_from: {{active_id|int()-121}},
+					{% endif %}
+				{% endif %}
+			{% else %}
+				{% for d in districts %}
+					{% if d[0] == active_id %}
+						{% if loop.index-1 > (districts|length() - 17) %}
+						start_from: {{districts|length() - 17}}
+						{% else %}
+						start_from: {{loop.index-1}},
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		});
+	});	
+</script>
+{% endif %}
+{% endif %}
+<div id="years-tabs">
+  	{% for y in years %}
+    	{% if y == year %}<div class='years-tabs-tab-active'>{% else %}<div class='years-tabs-tab'>{% endif %}<a href="/primary/{{y}}?office={{active}}{% if district_id|length() > 0 %}&dist_id={{district_id}}{% elif active=='ushouse' %}&dist_id={{office}}{% endif %}">{{y}}</a></div>
+    {% endfor %}
+</div>
+<div id='office-selection'>{% if year != '2004' %}
+	{% for o in office_names %}{% if active == o[0] %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/primary/{{year}}/{{o[0]}}">{{o[1]}}</a></div>{% endfor %}{% endif %}{% if active == 'ushouse' %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/primary/{{year}}/ushouse">US House<a/></div>{% if offices.senate == True %}{% if active == 'senate' %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/primary/{{year}}/senate">State Senate</a></div>{% endif %}{% if active == 'house' %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/primary/{{year}}/house">State House</a></div>
+</div>
+{% if active == 'ushouse' %}
+<div id='house-district-tabs'>
+{% for d in districts %}{% if d[0] == active_id %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/primary/{{year}}/ushouse/{{d[1]}}">{{d[1]}}</a></div>{% endfor %}
+</div>
+{% endif %}
+{% if active == 'house' %}
+	{% if districts|length() > 18 %}
+	<div class='als-container' id='house-district-tabs'>
+		<span class="als-prev"><img src="/static/thin_left_arrow_333.png" alt="prev" title="previous" /></span>
+		<div class="als-viewport">
+			 <ul class="als-wrapper">
+	{% for d in districts %}<li class="als-item">{% if d[0] == active_id %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/primary/{{year}}/{{active}}/{{d[1]}}">{{d[1]}}</a></div></li>{% endfor %}
+			</ul>
+		</div>
+		<span class="als-next"><img src="/static/thin_right_arrow_333.png" alt="next" title="next" /></span> <!-- "next" button -->
+	</div>
+	{% else %}
+	<div id='house-district-tabs'>{% for d in districts %}{% if d[0] == active_id %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/primary/{{year}}/{{active}}/{{d[1]}}">{{d[1]}}</a></div>{% endfor %}</div>
+	{% endif %}
+{% endif %}
+{% if active == 'senate' %}
+	{% if districts|length() > 18 %}
+	<div class='als-container' id='house-district-tabs'>
+		<span class="als-prev"><img src="/static/thin_left_arrow_333.png" alt="prev" title="previous" /></span>
+		<div class="als-viewport">
+			 <ul class="als-wrapper">
+	{% for d in districts %}<li class="als-item">{% if d[0] == active_id %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/primary/{{year}}/{{active}}/{{d[1]}}">{{d[1]}}</a></div></li>{% endfor %}
+	</ul>
+		</div>
+		<span class="als-next"><img src="/static/thin_right_arrow_333.png" alt="next" title="next" /></span> <!-- "next" button -->
+	</div>
+	{% else %}
+	<div id='house-district-tabs'>{% for d in districts %}{% if d[0] == active_id %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/primary/{{year}}/{{active}}/{{d[1]}}">{{d[1]}}</a></div>{% endfor %}</div>
+	{% endif %}
+{% endif %}

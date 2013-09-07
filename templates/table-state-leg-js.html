@@ -1,0 +1,24 @@
+<script type='text/javascript'>
+	google.load('visualization', '1', {'packages': ['table']});
+	google.setOnLoadCallback(drawTable);
+
+	function drawTable() {
+		var results = google.visualization.arrayToDataTable([ 
+			['{{office[6]}}D','GOP Candidate','GOP Votes','Margin','DFL Votes','DFL Candidate'],
+	        {% for d in districts %}
+	                ['{{d['district']}}','{{d['gop_candidate']}}','{{d['gop_votes']}}','{{d['margin']}}','{{d['dfl_votes']}}',{{d['dfl_candidate']}}],
+	            {% endif %}
+	        {% endfor %}]);
+
+		var options = {title: '{{year}} Minnesota {{office}} Results by district',
+						allowHtml: true
+					};
+		
+		var DRformatter = new google.visualization.BarFormat({width: 200,max: .5,min: -.5,showValue:false});
+		
+		DRformatter.format(results, 3); // Apply formatter to second column			
+		var chart = new google.visualization.Table(document.getElementById('{{year}}_results_table_div'));
+		chart.draw(results, options);
+	};
+	
+</script>

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Representative','PVI','Margin','Party', 'Total Votes'],
+          ['Tim Walz',         -1,   15.2,  'DFL',    335880],
+          ['John Kline',       -2,  -8.16,  'GOP',    358446],
+          ['Erik Paulsen',     -2,  -16.3,  'GOP',    382705],
+          ['Betty McCollum',   11,  30.75,  'DFL',    347991],
+          ['Keith Ellison',    22,  49.36,  'DFL',    351969],
+          ['Michele Bachmann',-10,  -1.21,  'GOP',    355153],
+          ['Collin Peterson',  -6,  25.54,  'DFL',    327576],
+          ['Rick Nolan',       -1,    8.9,  'DFL',    353663],
+        ]);
+
+        var options = {
+          title: 'Correlation between Cook PVI and Margin of Victory for Minnesota Congress People, bubbles sized by total votes cast in district',
+          hAxis: {title: 'Cook PVI', viewWindow:{min: -15, max: 25}},
+          vAxis: {title: 'Margin of Victory in %'},
+          sizeAxis: {minSize: 10},
+          bubble: {textStyle: {fontSize: 11}},
+          chartArea: {width: '95%', height: '85%'},
+          legend: {position: 'in'},
+        };
+
+        var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+
+<div id='front-dashboard-container'>
+  <h1>Minnesota General Elections</h1><h2></h2><br><br>
+    
+
+	<div id="bubble-chart-area">
+		<div id="chart_div" style="width: 750px; height: 500px;"></div>
+	</div>
+</div>
+{% endblock %}
