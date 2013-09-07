@@ -36,6 +36,7 @@ statewide_house_page='statewide-house.html'
 statewide_district_page='statewide-district.html'
 primary_page='primary.html'
 history_page='history.html'
+graph_page='elections-graph.html'
 about_page='about.html'
 feedback_page='feedback.html'
 feedback_response_page='feedback-response.html'
@@ -296,6 +297,10 @@ polling_title={
     'senator':'Al Franken Approvals',
 }
 
+graph_page_style_names={
+    'raw':'raw votes',
+    'percent':'vote %',
+}
 
 def formatProperName(data):
     results=[]
@@ -366,6 +371,58 @@ def getOfficeCodefromDistrict(district):
             n+=187
             return '0'+str(n)
     return None
+
+def formatChartOfficeData(data,style):
+    dfl_table={}
+    gop_table={}
+    ip_table={}
+    ip_present='0'
+    for d in data:
+        if d.party_id=="DFL":
+            if style == 'raw':
+                dfl_table[d.year]=d.candidate_votes
+            else:
+                dfl_table[d.year]=d.percent_votes
+        elif d.party_id=="R" or d.party_id=="R  ":
+            if style == 'raw':
+                gop_table[d.year]=d.candidate_votes
+            else:
+                gop_table[d.year]=d.percent_votes
+        elif d.party_id=="IP" or d.party_id=="I  ":
+            ip_present='1'
+            if style == 'raw':
+                ip_table[d.year]=d.candidate_votes
+            else:
+                ip_table[d.year]=d.percent_votes
+    results=[]
+    for year in dfl_table:
+        if year in gop_table:
+            if ip_present=='1':
+                if year in ip_table:
+                    results.append([year,dfl_table[year],gop_table[year],ip_table[year]])
+                else:
+                    results.append([year,dfl_table[year],gop_table[year],'0'])
+            else:
+                results.append([year,dfl_table[year],gop_table[year]])
+        else:
+            if ip_present=='1':
+                if year in ip_table:
+                    results.append([year,dfl_table[year],'0',ip_table[year]])
+                else:
+                    results.append([year,dfl_table[year],'0','0'])
+            else:
+                results.append([year,dfl_table[year],'0'])
+    for year in gop_table:
+        if year not in dfl_table:
+            if ip_present=='1':
+                if year in ip_table:
+                    results.append([year,'0',gop_table[year],ip_table[year]])
+                else:
+                    results.append([year,'0',gop_table[year],'0'])
+            else:
+                results.append([year,'0',gop_table[year]])
+
+    return ip_present,sorted(results, key=lambda results: int(results[0]),reverse=False)
 
 # page handlers
 class MainHandler(GenericHandler):
@@ -743,6 +800,99 @@ class PrimaryYearLegHandler(GenericHandler):
         else:
             self.redirect('/primary')
 
+class GraphPageHandler(GenericHandler):
+    def get(self):
+        params=self.check_login('/graph')
+        style=self.request.get("style")
+        office=self.request.get("office")
+        params['office']='president'
+        params['style']='percent'
+        params['ushouse_dist_id']='0'
+        params['senate_dist_id']='0'
+        params['house_dist_id']='0'
+        params['senate_range']=state_leg_ranges['senate']
+        params['house_range']=state_leg_ranges['house']
+        params['title']=office_id_key[office_link_key[params['office']]] + ', ' + graph_page_style_names[params['style']]
+        data=Results.by_office_id(office_link_key[params['office']])
+        if data:
+            params['ip_present'],params['results']=formatChartOfficeData(data,params['style'])
+        self.render(graph_page,**params)
+
+class CustomGraphPageHandler(GenericHandler):
+    def get(self): 
+        params=self.check_login('/graph/c')
+        style=self.request.get("style")
+        office=self.request.get("office")
+        params['ushouse_dist_id']=self.request.get("ushouse")
+        params['senate_dist_id']=self.request.get("senate")
+        params['house_dist_id']=self.request.get("house")
+        if style!=None and (style != 'raw' and style != 'percent'):
+            params['style']='percent'
+        else:
+            params['style']=style
+        params['senate_range']=state_leg_ranges['senate']
+        params['house_range']=state_leg_ranges['house']
+        if office in office_link_names:
+            params['office']=office
+            params['title']=office_id_key[office_link_key[params['office']]] + ', ' + graph_page_style_names[params['style']]
+            data=Results.by_office_id(office_link_key[params['office']])
+            if data:
+                params['ip_present'],params['results']=formatChartOfficeData(data,style)
+                self.render(graph_page,**params)
+        elif office=='ushouse':
+            params['office']=office
+            dist_id=self.request.get("ushouse")
+            if dist_id.isdigit():
+                dist_num=int(dist_id)
+                if dist_num>0 and dist_num<9:
+                    params['ushouse_dist_id']=dist_id
+                    params['title']='US House ' + dist_id + ', ' + graph_page_style_names[params['style']]
+                    data=Results.by_office_id(us_rep_id_key[dist_num-1][0])
+                    if data:
+                        params['ip_present'],params['results']=formatChartOfficeData(data,style)
+                        self.render(graph_page,**params)
+                else:
+                    self.redirect('/graph')
+            else:
+                self.redirect('/graph')
+        elif office=='senate':
+            params['office']=office
+            dist_id=self.request.get("senate")
+            if dist_id.isdigit():
+                dist_num=int(dist_id)
+                if dist_num>0 and dist_num<68:
+                    params['senate_dist_id']=dist_id
+                    params['title']='State Senate ' + dist_id + ', ' + graph_page_style_names[params['style']]
+                    data=Results.by_office_id('0'+str(dist_num+120))
+                    if data:
+                        params['ip_present'],params['results']=formatChartOfficeData(data,params['style'])
+                        self.render(graph_page,**params)
+                else:
+                    self.redirect('/graph')
+            else:
+                self.redirect('/graph')
+        elif office=='house':
+            params['office']=office
+            dist_id=self.request.get("house")
+            try:
+                n=int(dist_id[:-1])*2
+                if n<135 and n>0:
+                    if dist_id.find('B') == -1 and dist_id.find('A') > 0:
+                        n-=1
+                    dist_num=n
+                    params['house_dist_id']=str(n)
+                    params['title']='State House ' + dist_id + ', ' + graph_page_style_names[params['style']]
+                    data=Results.by_office_id('0'+str(dist_num+187))
+                    if data:
+                        params['ip_present'],params['results']=formatChartOfficeData(data,style)
+                        self.render(graph_page,**params)
+                else:
+                    self.redirect('/graph')
+            except:
+                self.redirect('/graph')
+        else:
+            self.redirect('/graph')
+
 class ParseResultsHandler(GenericHandler):
     def get(self,year):
         params=self.check_login("/parse/results/"+year)
@@ -831,6 +981,8 @@ app = webapp2.WSGIApplication([
     ('/primary/([0-9]+)/([A-Za-z0-9]+)?/?', PrimaryYearOfficeHandler),
     ('/primary/([0-9]+)/ushouse/([0-9])/?', PrimaryYearUSHouseHandler),
     ('/primary/([0-9]+)/(house|senate)/([0-9]+[A|B]?)/?', PrimaryYearLegHandler),
+    ('/graph/?', GraphPageHandler),
+    ('/graph/c', CustomGraphPageHandler),
     ('/about/?', AboutPageHandler),
     ('/feedback/?', FeedbackPageHandler),
     ('/feedback-response/?', FeedbackResponsePageHandler),
