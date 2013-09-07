@@ -156,6 +156,12 @@ def getMNLegDistrictById(district_id):
 
 def getUSHouseMemberData(district):
     #http://transparencydata.com/api/1.0/entities/d0a7e006e79642ec8f5e53ab8234e2d3.json?apikey=4a26c19c3cae4f6c843c3e7816475fae
+    # totals
+    # type: politician
+    # external_ids: [{'id':'N00027467', 'namespace':'urn:crp:recipient'}, {'id':'H6MN01174', 'namespace':'urn:fec:candidate'}]
+    # name: Timothy J Walz (D)
+    # metadata
+    # id:d0a7e006e79642ec8f5e53ab8234e2d3
     if district in ushouse_lookup_ids:
         url=ushouse_base_url+'/'+ushouse_lookup_ids[district]+'.json?'+apikey_url+API_KEY
         return sendGetRequest(url)
@@ -164,9 +170,8 @@ def getUSHouseMemberData(district):
 
 def getFECData(district):
     try:
-        # json_data = open('/static/two_year_summary.json').read()
-        # data=json.dumps(json_data)
-        data = open('static/two_year_summary.json')
+        json_data = open('templates/' + district + '.json')
+        data = json.load(json_data)
         return data
     except:
         return None

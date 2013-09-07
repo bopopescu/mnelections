@@ -42,6 +42,7 @@ maps_page='maps.html'
 maps_district_page='maps-district.html'
 maps_ushouse_district_page='maps-ushouse-district.html'
 cong_bubble='cong-bubble-chart.html'
+cong_money='money.html'
 about_page='about.html'
 feedback_page='feedback.html'
 feedback_response_page='feedback-response.html'
@@ -89,7 +90,7 @@ def connectToAWS():
 def getAWSKey(key):
     c=connectToAWS()
     if c:
-        b=c.get_bucket('mnleginfo')
+        b=c.get_bucket('mnelections')
         k=Key(b)
         k.key=key
         return k
@@ -188,6 +189,17 @@ us_rep_id_key=[('0104','1'),
 			   ('0109','6'),
 			   ('0110','7'),
 			   ('0111','8')]
+
+ushouse_district_names={
+    '1':'one',
+    '2':'two',
+    '3':'three',
+    '4':'four',
+    '5':'five',
+    '6':'six',
+    '7':'seven',
+    '8':'eight',
+}
 
 ushouse_range=range(104,112)#[104,111]
 state_senate_range=range(121,188)#[121,187]
@@ -440,24 +452,30 @@ def formatChartOfficeData(data,style):
 class MainHandler(GenericHandler):
     def get(self):
         params=self.check_login("/")
+        params['title']="MN Elections Info | 2014 Elections Polling"
+        params['description']=default_meta_description
         params['years']=election_years
         office=self.request.get("polls")
         if office in polling_title:
             params['active']=office
         else:
             params['active']='governor'
-        params['title']=polling_title[params['active']]
+        params['graph_title']=polling_title[params['active']]
         self.render(main_page,**params)
 
 class HistoryHandler(GenericHandler):
     def get(self):
         params=self.check_login('/history')
+        params['title']="MN Elections Info | Elections History 1858-Present"
+        params['description']=default_meta_description
         params['year']=history_years[0]
         self.render(history_page,**params)
 
 class HistoryYearHandler(GenericHandler):
     def get(self,year):
         params=self.check_login('/history/'+year)
+        params['title']="MN Elections Info | Elections History 1858-Present"
+        params['description']=default_meta_description
         if year in history_years:
             params['year']=year
             self.render(history_page,**params)
@@ -467,11 +485,13 @@ class HistoryYearHandler(GenericHandler):
 class StatewideHandler(GenericHandler):
     def get(self):
         params=self.check_login('/general')
+        params['description']=default_meta_description
         params['year']='2012'
         params=setStatewideParams(params)
         previous=self.request.get("office")
         params['office']=params['office_names'][0][1]
         params['active']=params['office_names'][0][0]
+        params['title']="MN Elections Info | " + params['year'] + " General Elections Results, " + params['office']
         data=Results.by_year_by_office_id(params['year'],office_link_key[params['active']])
         if data:
             results=formatProperName(data)
@@ -483,6 +503,8 @@ class StatewideHandler(GenericHandler):
 class StatewideYearHandler(GenericHandler):
     def get(self,year):
         params=self.check_login("/general/"+year)
+        params['title']="MN Elections Info"
+        params['description']=default_meta_description
         if year in election_years:
             params['year']=year
             params=setStatewideParams(params)
@@ -524,6 +546,7 @@ class StatewideYearHandler(GenericHandler):
                             self.redirect('/general/'+year+'/'+previous)
             params['office']=params['office_names'][0][1]
             params['active']=params['office_names'][0][0]
+            params['title']="MN Elections Info | " + params['year'] + " General Elections Results, " + params['office']
             data=Results.by_year_by_office_id(params['year'],office_link_key[params['active']])
             if data:
                 results=formatProperName(data)
@@ -537,6 +560,8 @@ class StatewideYearHandler(GenericHandler):
 class StatewideYearOfficeHandler(GenericHandler):
     def get(self,year,office):
         params=self.check_login("/general/"+year+'/'+office)
+        params['title']="MN Elections Info"
+        params['description']=default_meta_description
         if year in election_years:
             params['year']=year
             params=setStatewideParams(params)
@@ -545,6 +570,7 @@ class StatewideYearOfficeHandler(GenericHandler):
                     params['active']='ushouse'
                     params['office']='1'
                     params['district_key']=us_rep_id_key
+                    params['title']="MN Elections Info | " + params['year'] + " General Elections Results, US House " + params['office']
                     data=Results.by_year_by_office_id(params['year'],us_rep_id_key[int(params['office'])-1][0])
                     if data:
                         results=formatProperName(data)
@@ -561,6 +587,7 @@ class StatewideYearOfficeHandler(GenericHandler):
                         params['office']='State House'
                         params['active_id']='0188'
                         params['district_id']='1A'
+                    params['title']="MN Elections Info | " + params['year'] + " General Elections Results, " + params['office'] + " " + params['district_id']
                     data=Results.by_year_by_office_id(params['year'],params['active_id'])
                     if data:
                         results=formatProperName(data)
@@ -574,6 +601,7 @@ class StatewideYearOfficeHandler(GenericHandler):
                         if office in all_amendment_text[year]:
                             params['amendment_text']=all_amendment_text[year][office]
                     params['office']=office_id_key[office_link_key[office]]
+                    params['title']="MN Elections Info | " + params['year'] + " General Elections Results, " + params['office']
                     data=Results.by_year_by_office_id(params['year'],office_link_key[office])
                     if data:
                         results=formatProperName(data)
@@ -589,6 +617,8 @@ class StatewideYearOfficeHandler(GenericHandler):
 class StatewideYearUSHouseHandler(GenericHandler):
     def get(self,year,office):
         params=self.check_login("/general/"+year+'/ushouse/'+office)
+        params['title']="MN Elections Info"
+        params['description']=default_meta_description
         if year in election_years:
             params['year']=year
             params['active']='ushouse'
@@ -596,6 +626,7 @@ class StatewideYearUSHouseHandler(GenericHandler):
             if int(office) < 9 and int(office) > 0:
                 params['office']=office
                 params['district_key']=us_rep_id_key
+                params['title']="MN Elections Info | " + params['year'] + " General Elections Results, US House " + params['office']
                 data=Results.by_year_by_office_id(params['year'],us_rep_id_key[int(params['office'])-1][0])
                 if data:
                     results=formatProperName(data)
@@ -610,15 +641,20 @@ class StatewideYearUSHouseHandler(GenericHandler):
 class StatewideYearLegHandler(GenericHandler):
     def get(self,year,office,office_id):
         params=self.check_login("/general/"+year+'/'+office+'/'+office_id)
+        params['title']="MN Elections Info"
+        params['description']=default_meta_description
         if year in election_years:
             params['year']=year
             params['active']=office
             params=setStatewideParams(params) 
             params['office']='State House'
+            if office=='senate':
+                params['office']='State Senate'
             office_code=getOfficeCodefromDistrict(office_id)
             if office_code!=None:
                 params['district_id']=office_id
                 params['active_id']=office_code
+                params['title']="MN Elections Info | " + params['year'] + " General Elections Results, " + params['office'] + " " + params['district_id']
                 data=Results.by_year_by_office_id(params['year'],params['active_id'])
                 if data:
                     results=formatProperName(data)
@@ -635,10 +671,13 @@ class StatewideYearLegHandler(GenericHandler):
 class PrimaryHandler(GenericHandler):
     def get(self):
         params=self.check_login('/primary')
+        params['title']="MN Elections Info"
+        params['description']=default_meta_description
         params['year']='2012'
         params=setPrimaryParams(params)
         params['office']=params['office_names'][0][1]
         params['active']=params['office_names'][0][0]
+        params['title']="MN Elections Info | " + params['year'] + " Primary Elections Results, " + params['office']
         data=Primary.by_year_by_office_id(params['year'],office_link_key[params['active']])
         if data:
             results=formatProperName(data)
@@ -650,6 +689,8 @@ class PrimaryHandler(GenericHandler):
 class PrimaryYearHandler(GenericHandler):
     def get(self,year):
         params=self.check_login("/primary/"+year)
+        params['title']="MN Elections Info"
+        params['description']=default_meta_description
         if year in election_years:
             params['year']=year
             params=setPrimaryParams(params)
@@ -692,12 +733,14 @@ class PrimaryYearHandler(GenericHandler):
             if year!='2004':
                 params['office']=params['office_names'][0][1]
                 params['active']=params['office_names'][0][0]
+                params['title']="MN Elections Info | " + params['year'] + " Primary Elections Results, " + params['office']
                 data=Primary.by_year_by_office_id(params['year'],office_link_key[params['active']])
             else:
                 params['active']='ushouse'
                 params['districts']=p_ushouse_offices[params['year']]
                 params['active_id']=us_rep_id_key[0][0]
                 params['district_id']=us_rep_id_key[0][1]
+                params['title']="MN Elections Info | " + params['year'] + " Primary Elections Results, US House " + params['district_id']
                 data=Primary.by_year_by_office_id(params['year'],'0104')
             if data:
                 results=formatProperName(data)
@@ -711,6 +754,8 @@ class PrimaryYearHandler(GenericHandler):
 class PrimaryYearOfficeHandler(GenericHandler):
     def get(self,year,office):
         params=self.check_login("/primary/"+year+'/'+office)
+        params['title']="MN Elections Info"
+        params['description']=default_meta_description
         if year in election_years:
             params['year']=year
             params=setPrimaryParams(params)
@@ -720,6 +765,7 @@ class PrimaryYearOfficeHandler(GenericHandler):
                     params['districts']=p_ushouse_offices[params['year']]
                     params['active_id']=params['districts'][0][0]
                     params['district_id']=params['districts'][0][1]
+                    params['title']="MN Elections Info | " + params['year'] + " Primary Elections Results, US House " + params['district_id']
                     data=Primary.by_year_by_office_id(params['year'],params['active_id'])
                     if data:
                         results=formatProperName(data)
@@ -735,6 +781,7 @@ class PrimaryYearOfficeHandler(GenericHandler):
                     params['districts']=Primary.get_offices_by_other_office(params['year'],params['active'])
                     params['active_id']=params['districts'][0][0]
                     params['district_id']=params['districts'][0][1]
+                    params['title']="MN Elections Info | " + params['year'] + " Primary Elections Results, " + params['office'] + " " + params['district_id']
                     data=Primary.by_year_by_office_id(params['year'],params['active_id'])
                     if data:
                         results=formatProperName(data)
@@ -746,6 +793,7 @@ class PrimaryYearOfficeHandler(GenericHandler):
                     if office in all_amendment_text[year]:
                         params['amendment_text']=all_amendment_text[year][office]
                 params['office']=office_id_key[office_link_key[office]]
+                params['title']="MN Elections Info | " + params['year'] + " Primary Elections Results, " + params['office']
                 data=Primary.by_year_by_office_id(params['year'],office_link_key[office])
                 if data:
                     results=formatProperName(data)
@@ -761,6 +809,8 @@ class PrimaryYearOfficeHandler(GenericHandler):
 class PrimaryYearUSHouseHandler(GenericHandler):
     def get(self,year,office):
         params=self.check_login("/primary/"+year+'/ushouse/'+office)
+        params['title']="MN Elections Info"
+        params['description']=default_meta_description
         if year in election_years:
             params['year']=year
             params['active']='ushouse'
@@ -770,6 +820,7 @@ class PrimaryYearUSHouseHandler(GenericHandler):
             if office_int in p_ushouse_lists[params['year']]:
                 params['active_id']=us_rep_id_key[office_int-1][0]
                 params['district_id']=us_rep_id_key[office_int-1][1]
+                params['title']="MN Elections Info | " + params['year'] + " Primary Elections Results, US House  " + params['district_id']
                 data=Primary.by_year_by_office_id(params['year'],params['active_id'])
                 if data:
                     results=formatProperName(data)
@@ -785,6 +836,8 @@ class PrimaryYearUSHouseHandler(GenericHandler):
 class PrimaryYearLegHandler(GenericHandler):
     def get(self,year,office,office_id):
         params=self.check_login("/primary/"+year+'/'+office+'/'+office_id)
+        params['title']="MN Elections Info"
+        params['description']=default_meta_description
         if year in election_years:
             params['year']=year
             params['active']=office
@@ -801,6 +854,7 @@ class PrimaryYearLegHandler(GenericHandler):
                 if d[1] == office_id:
                     params['district_id']=office_id
                     params['active_id']=getOfficeCodefromDistrict(office_id)
+                    params['title']="MN Elections Info | " + params['year'] + " Primary Elections Results, " + params['office'] + " " + params['district_id']
                     data=Primary.by_year_by_office_id(params['year'],params['active_id'])
                     break
             if data!=None:
@@ -814,7 +868,9 @@ class PrimaryYearLegHandler(GenericHandler):
 
 class GraphPageHandler(GenericHandler):
     def get(self):
-        params=self.check_login('/graph')
+        params=self.check_login("/graph")
+        params['title']="MN Elections Info | General Elections Graph, President, vote %"
+        params['description']=default_meta_description
         style=self.request.get("style")
         office=self.request.get("office")
         params['office']='president'
@@ -824,7 +880,7 @@ class GraphPageHandler(GenericHandler):
         params['house_dist_id']='0'
         params['senate_range']=state_leg_ranges['senate']
         params['house_range']=state_leg_ranges['house']
-        params['title']=office_id_key[office_link_key[params['office']]] + ', ' + graph_page_style_names[params['style']]
+        params['graph_title']=office_id_key[office_link_key[params['office']]] + ', ' + graph_page_style_names[params['style']]
         data=Results.by_office_id(office_link_key[params['office']])
         if data:
             params['ip_present'],params['results']=formatChartOfficeData(data,params['style'])
@@ -832,7 +888,9 @@ class GraphPageHandler(GenericHandler):
 
 class CustomGraphPageHandler(GenericHandler):
     def get(self): 
-        params=self.check_login('/graph/c')
+        params=self.check_login("/graph")
+        params['title']="MN Elections Info"
+        params['description']=default_meta_description
         style=self.request.get("style")
         office=self.request.get("office")
         params['ushouse_dist_id']=self.request.get("ushouse")
@@ -846,7 +904,8 @@ class CustomGraphPageHandler(GenericHandler):
         params['house_range']=state_leg_ranges['house']
         if office in office_link_names:
             params['office']=office
-            params['title']=office_id_key[office_link_key[params['office']]] + ', ' + graph_page_style_names[params['style']]
+            params['graph_title']=office_id_key[office_link_key[params['office']]] + ', ' + graph_page_style_names[params['style']]
+            params['title']="MN Elections Info | General Elections Graph, " + office_id_key[office_link_key[params['office']]] + ', ' + graph_page_style_names[params['style']]
             data=Results.by_office_id(office_link_key[params['office']])
             if data:
                 params['ip_present'],params['results']=formatChartOfficeData(data,style)
@@ -858,7 +917,8 @@ class CustomGraphPageHandler(GenericHandler):
                 dist_num=int(dist_id)
                 if dist_num>0 and dist_num<9:
                     params['ushouse_dist_id']=dist_id
-                    params['title']='US House ' + dist_id + ', ' + graph_page_style_names[params['style']]
+                    params['graph_title']='US House ' + dist_id + ', ' + graph_page_style_names[params['style']]
+                    params['title']="MN Elections Info | General Elections Graph, " + 'US House ' + dist_id + ', ' + graph_page_style_names[params['style']]
                     data=Results.by_office_id(us_rep_id_key[dist_num-1][0])
                     if data:
                         params['ip_present'],params['results']=formatChartOfficeData(data,style)
@@ -874,7 +934,8 @@ class CustomGraphPageHandler(GenericHandler):
                 dist_num=int(dist_id)
                 if dist_num>0 and dist_num<68:
                     params['senate_dist_id']=dist_id
-                    params['title']='State Senate ' + dist_id + ', ' + graph_page_style_names[params['style']]
+                    params['graph_title']='State Senate ' + dist_id + ', ' + graph_page_style_names[params['style']]
+                    params['title']="MN Elections Info | General Elections Graph, " + 'State Senate ' + dist_id + ', ' + graph_page_style_names[params['style']]
                     data=Results.by_office_id('0'+str(dist_num+120))
                     if data:
                         params['ip_present'],params['results']=formatChartOfficeData(data,params['style'])
@@ -893,7 +954,8 @@ class CustomGraphPageHandler(GenericHandler):
                         n-=1
                     dist_num=n
                     params['house_dist_id']=str(n)
-                    params['title']='State House ' + dist_id + ', ' + graph_page_style_names[params['style']]
+                    params['graph_title']='State House ' + dist_id + ', ' + graph_page_style_names[params['style']]
+                    params['title']="MN Elections Info | General Elections Graph, " + 'State House ' + dist_id + ', ' + graph_page_style_names[params['style']]
                     data=Results.by_office_id('0'+str(dist_num+187))
                     if data:
                         params['ip_present'],params['results']=formatChartOfficeData(data,style)
@@ -908,6 +970,8 @@ class CustomGraphPageHandler(GenericHandler):
 class MapsPageHandler(GenericHandler):
     def get(self): 
         params=self.check_login('/maps')
+        params['title']="MN Elections Info | District Maps, US House"
+        params['description']=default_meta_description
         params['range']=range(1,9)
         params['district_map']='ushouse'
         params['office']="US House"
@@ -916,28 +980,33 @@ class MapsPageHandler(GenericHandler):
 class MapsChamberPageHandler(GenericHandler):
     def get(self,chamber): 
         params=self.check_login('/maps/'+chamber)
-        page=get_contents_of_url(aws_output+'maps/'+chamber)
-        if page:
-            self.write(page)
+        params['title']="MN Elections Info"
+        params['description']=default_meta_description
+        if chamber=='ushouse':
+            params['district_map']=chamber
+            params['range']=range(1,9)
+            params['office']="US House"
+            params['districts']=[]
+            params['title']="MN Elections Info | District Maps, US House"
+            self.render(maps_ushouse_district_page,**params)
+            # k = getAWSKey('output/maps/'+chamber)
+            # k.set_contents_from_string(render_str(maps_ushouse_district_page, **params))
+            # k.set_acl('public-read')
+            # self.write(k.get_contents_as_string())
         else:
             params['district_map']=chamber
-            if chamber=='ushouse':
-                params['range']=range(1,9)
-                params['office']="US House"
-                params['districts']=[]
-                self.render(maps_ushouse_district_page,**params)
-                # k = getAWSKey('output/maps/'+chamber)
-                # k.set_contents_from_string(render_str(maps_ushouse_district_page, **params))
-                # k.set_acl('public-read')
-                # self.write(k.get_contents_as_string())
+            page=get_contents_of_url(aws_output+'maps/'+chamber+'_map')
+            if page:
+                self.write(page)
             else:
                 params['office']="State " + chamber.title()
                 if chamber=='house':
                     params['range']=range(1,135)
                 else:
                     params['range']=range(1,68)
+                params['title']="MN Elections Info | District Maps, " + params['office']
                 params['districts']=getAllMNLegDistrictShapesbyChamber(getChamberName(chamber))
-                k = getAWSKey('output/maps/'+chamber)
+                k = getAWSKey('output/maps/'+chamber+'_map')
                 k.set_contents_from_string(render_str(maps_page, **params))
                 k.set_acl('public-read')
                 self.write(k.get_contents_as_string())
@@ -945,6 +1014,8 @@ class MapsChamberPageHandler(GenericHandler):
 class MapsChamberDistrictPageHandler(GenericHandler):
     def get(self,chamber,dist_id): 
         params=self.check_login('/maps/'+chamber+'/'+dist_id)
+        params['title']="MN Elections Info"
+        params['description']=default_meta_description
         params['district_map']=chamber
         if chamber=='ushouse':
             params['range']=range(1,9)
@@ -955,6 +1026,7 @@ class MapsChamberDistrictPageHandler(GenericHandler):
                     params['demo'],params['demo_url']=fetchDistrictDemoData('0'+str(params['dist_num']),'ushouse')
                     params['district']=dist_id
                     params['data']=[]
+                    params['title']="MN Elections Info | District Maps, US House " + dist_id
                     #self.write('0'+str(params['dist_num']))
                     self.render(maps_ushouse_district_page,**params)
                 else:
@@ -968,6 +1040,7 @@ class MapsChamberDistrictPageHandler(GenericHandler):
                     params['dist_num']=int(dist_id)
                     if params['dist_num']<68 and params['dist_num']>0:
                         params['range']=range(1,68)
+                        params['title']="MN Elections Info | District Maps, " + params['office'] + " " + dist_id
                         params['district']=getMNLegDistrictShape(getChamberName(chamber),dist_id)
                         data=Results.by_year_by_office_id('2012','0'+str(params['dist_num']+120))
                         if data:
@@ -986,6 +1059,7 @@ class MapsChamberDistrictPageHandler(GenericHandler):
                             n-=1
                         params['dist_num']=n
                         params['range']=range(1,135)
+                        params['title']="MN Elections Info | District Maps, " + params['office'] + " " + dist_id
                         params['district']=getMNLegDistrictShape(getChamberName(chamber),dist_id)
                         data=Results.by_year_by_office_id('2012','0'+str(params['dist_num']+187))
                         if data:
@@ -997,46 +1071,69 @@ class MapsChamberDistrictPageHandler(GenericHandler):
                 except:
                     self.redirect('/graph')
 
-
 class BubblePageHandler(GenericHandler):
     def get(self):
         params=self.check_login('/bubble')
+        params['title']="MN Elections Info"
+        params['description']=default_meta_description
         self.render(cong_bubble,**params)  
+
+# def getFECDataForDisplay(district):
+#     data=getFECData(ushouse_district_names[district])
+#     for d in data:
+#         results={
+#             'name':data[d]['cand_nm'],
+#             'party':data[d]['party'],
+#             'description':data[d]['description'],
+#             'copyright':data[d]['copyright'],
+#             #'candidate_id':data[d]['cand_id'],
+#             'money':{
+#                 'Total Individual':data[d]['summary']['Total Individual Contributions'],
+#                 'Party Committees':data[d]['summary']['Party Committees Contributions'],
+#                 'Other Committees':data[d]['summary']['Other Committees Contributions'],
+#                 'Candidates':data[d]['summary']['Candidate Contributions'],
+#                 'Total Contributions':data[d]['summary']['TOTAL CONTRIBUTIONS'],
+#                 'Total Loans':data[d]['summary']['TOTAL LOANS'],
+#                 'Total Receipts':data[d]['summary']['TOTAL RECEIPTS'],
+
+#             },
+#         }
+#         return results
+
+def getFECSummeryDataForDisplay(district):
+    data=getFECData(district)
+    for d in data:
+        first=data[d]['cand_nm'][data[d]['cand_nm'].find(',')+2:].split()
+        name = first[0] + ' ' + data[d]['cand_nm'][:data[d]['cand_nm'].find(',')]
+        results={
+            'name':name.title(),
+            'party':data[d]['party'],
+            'description':data[d]['description'],
+            'copyright':data[d]['copyright'],
+            #'candidate_id':data[d]['cand_id'],
+            'money':{
+                'Beginning Cash On Hand':int(data[d]['summary']['Beginning Cash On Hand'][1:-3].replace(',', '')),
+                'Ending Cash On Hand':int(data[d]['summary']['Ending Cash On Hand'][1:-3].replace(',', '')),
+                'Net Contributions':int(data[d]['summary']['Net Contributions'][1:-3].replace(',', '')),
+                'Net Operating Expenditures':int(data[d]['summary']['Net Operating Expenditures'][1:-3].replace(',', '')),
+                'Debts/Loans Owed By':int(data[d]['summary']['Debts/Loans Owed By'][1:-3].replace(',', '')),
+                'Debts/Loans Owed To':int(data[d]['summary']['Debts/Loans Owed To'][1:-3].replace(',', '')),
+            },
+        }
+        return results
 
 class MemberPageHandler(GenericHandler):
     def get(self):
         params=self.check_login('/member')
-        #data=getFECData('1')
-        # for d in data['totals']:
-        #     for n in data['totals'][d]:
-        #         if data['totals'][d][n]>0:
-        #             self.write(d)
-        #             self.write(' - ')
-        #             self.write(n)
-        #             self.write(' - ')
-        #             self.write(data['totals'][d][n])
-        #self.write(data)
-        try:
-            #with open('//static/two_year_summary.json'): 
-            
-            self.write(os.path.isfile(cong_bubble))
-        except IOError:
-            self.write('File does not exist')
-        #             self.write('<br>')
-            # self.write('<br>')
-            # self.write('<br>')
-        # self.write('Metadata: ')
-        # self.write(data['metadata'])
-        # self.write('<br>')
-        
-        #self.render(cong_bubble,**params)
-
-        # totals
-        # type: politician
-        # external_ids: [{'id':'N00027467', 'namespace':'urn:crp:recipient'}, {'id':'H6MN01174', 'namespace':'urn:fec:candidate'}]
-        # name: Timothy J Walz (D)
-        # metadata
-        # id:d0a7e006e79642ec8f5e53ab8234e2d3
+        params['title']="MN Elections Info"
+        params['description']=default_meta_description
+        r=range(1,9)
+        params['data']=[]
+        for d in r:
+            params['district']=str(d)
+            params['data'].append(getFECSummeryDataForDisplay(ushouse_district_names[params['district']]))
+        #self.write(params['data'])
+        self.render(cong_money,**params)
 
 class ParseResultsHandler(GenericHandler):
     def get(self,year):
@@ -1089,24 +1186,48 @@ class ParsePrecinctTableHandler(GenericHandler):
 class AboutPageHandler(GenericHandler):
     def get(self):
         params=self.check_login('/about')
+        params['title']="MN Elections Info | About the Minnesota Elections Info site"
+        params['description']=default_meta_description
         self.render(about_page,**params)  
 
 class FeedbackPageHandler(GenericHandler):
     def get(self):
         params=self.check_login('/feedback')
+        params['title']="MN Elections Info | Send us your feedback"
+        params['description']=default_meta_description
         self.render(feedback_page,**params)  
 
 class FeedbackResponsePageHandler(GenericHandler):
     def get(self):
         params=self.check_login('/feedback-response')
+        params['title']="MN Elections Info | Thanks for your feedback!"
+        params['description']=default_meta_description
         self.render(feedback_response_page,**params)  
 
 class NotFoundPageHandler(GenericHandler):
     def get(self):
         params=self.check_login('404')
+        params['title']="MN Elections Info | 404 Error, page not found"
+        params['description']=default_meta_description
         self.error(404)
         #self.response.out.write('<Your 404 error html page>')
-        self.render(e404_page,**params)	    	
+        self.render(e404_page,**params)	  
+
+class AWSMainHandler(GenericHandler):
+    def get(self):
+        params=self.check_login("/aws")
+        c=connectToAWS()
+        if c:
+            self.write('<b>Connected</b><br><br>')
+            buckets=c.get_all_buckets()
+            self.write('Searching AWS Buckets...<br>')
+            for b in buckets:
+                if b.name=='mnelections':
+                    self.write('Found "'+b.name+'" bucket!')
+        else:
+            self.write('<b>Not connected</b>')
+
+default_meta_description="""The Minnesota Elections Info site contains; General and Primary elections results from 2000-2012, Maps and Demographic Info of every Congressional and Legislative district and more."""  	
 
 app = webapp2.WSGIApplication([
     ('/?', MainHandler),
@@ -1131,10 +1252,11 @@ app = webapp2.WSGIApplication([
     ('/maps/?', MapsPageHandler),
     ('/maps/(ushouse|house|senate)/?', MapsChamberPageHandler),
     ('/maps/(ushouse|house|senate)/([0-9][0-9]?[A|B]?)/?', MapsChamberDistrictPageHandler),
-    ('/bubble/?', BubblePageHandler),
-    ('/member/?', MemberPageHandler),
+    # ('/bubble/?', BubblePageHandler),
+    # ('/member/?', MemberPageHandler),
     ('/about/?', AboutPageHandler),
     ('/feedback/?', FeedbackPageHandler),
     ('/feedback-response/?', FeedbackResponsePageHandler),
+    # ('/aws/?', AWSMainHandler),
     ('/.*', NotFoundPageHandler),
 ], debug=True)

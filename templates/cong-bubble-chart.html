@@ -20,7 +20,7 @@
         ]);
 
         var options = {
-          title: 'Correlation between Cook PVI and Margin of Victory for Minnesota Congress People, bubbles sized by total votes cast in district',
+          title: 'Correlation between 2014 Cook PVI and 2012 Margin of Victory for Minnesota Congress People, bubbles sized by total votes cast in district',
           hAxis: {title: 'Cook PVI', viewWindow:{min: -15, max: 25}},
           vAxis: {title: 'Margin of Victory in %'},
           sizeAxis: {minSize: 10},
@@ -35,11 +35,12 @@
     </script>
 
 <div id='front-dashboard-container'>
-  <h1>Minnesota General Elections</h1><h2></h2><br><br>
+  <h1>Meta Graphs</h1><h2>Cook PVI v Margin of Victory</h2><br><br>
     
 
 	<div id="bubble-chart-area">
 		<div id="chart_div" style="width: 750px; height: 500px;"></div>
+    <div id="fec-copywrite"><em>Cook PVI from <a href="http://cookpolitical.com/story/5604">cookpolitical.com</a></em></div>
 	</div>
 </div>
 {% endblock %}
