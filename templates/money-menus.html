@@ -1,0 +1,13 @@
+<div id="years-tabs">
+  	{% for y in years %}
+    	{% if y == year %}<div class='years-tabs-tab-active'>{% else %}<div class='years-tabs-tab'>{% endif %}<a href="/money/{{y}}">{{y}}</a></div>
+    {% endfor %}
+</div>
+<div id='office-selection'>
+	{% for o in office_names %}{% if active == o[0] %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/money/{{year}}/{{o[0]}}">{{o[1]}}</a></div>{% endfor %}{% if active == 'ushouse' %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/money/{{year}}/ushouse">US House<a/></div>
+</div>
+{% if active == 'ushouse' %}
+<div id='house-district-tabs'>
+{% for d in district_key %}{% if office == d[1] %}<div class='office-tabs-tab-active'>{% else %}<div class='office-tabs-tab'>{% endif %}<a href="/money/{{year}}/ushouse/{{d[1]}}">{{d[1]}}</a></div>{% endfor %}
+</div>
+{% endif %}

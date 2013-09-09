@@ -1,0 +1,272 @@
+{
+"fec.gov": {
+	"title": "Two Year Summary",
+	"description": "1996 Two Year Summary",
+	"timestamp": "Mon Sep 09 04:25:31 GMT 2013",
+	"copyright": "Copyright 2012, Federal Election Commission.",
+	"districts":{
+			"MN":{
+				"candidates":{
+
+				}
+			},
+			"1":{
+				"candidates":{
+					"H4MN01070":{
+						"cand_id": "H4MN01070",
+						"cand_nm": "GUTKNECHT, GILBERT WILLIAM JR",
+						"office": "3421 - 16TH AVENUE NW , ROCHESTER, MN 55901",
+						"election_yr": "null",
+						"office_st": "null",
+						"district": "P",
+						"party": "Republican Party",
+						"cmte_id": "C00282160",
+						"cmte_nm": "GUTKNECHT FOR U S CONGRESS COMMITTEE",
+						"summary": {
+						"Coverage Start Date": "01/01/1995",
+						"Coverage End Date": "12/31/1996",
+						"Total Individual Contributions":"$588,270.00",
+						"Party Committees Contributions":"$21,561.00",
+						"Other Committees Contributions":"$334,917.00",
+						"Candidate Contributions":"$0.00",
+						"TOTAL CONTRIBUTIONS":"$0.00",
+						"Transfers from Authorized Committees":"$0.00",
+						"Candidate Loans":"$0.00",
+						"Other Loans":"$0.00",
+						"TOTAL LOANS":"$0.00",
+						"Offsets to Operating Expenditures":"$0.00",
+						"Other Receipts":"$0.00",
+						"TOTAL RECEIPTS":"$954,726.00",
+						"Operating Expenditures":"$896,840.00",
+						"Transfers To Authorized Committees":"$0.00",
+						"Candidate Loan Repayments":"$0.00",
+						"Other Loan Repayments":"$0.00",
+						"TOTAL LOAN REPAYMENTS":"$0.00",
+						"Individual Refunds":"$0.00",
+						"Political Party Refunds":"$0.00",
+						"Other Committee Refunds":"$2,575.00",
+						"TOTAL CONTRIBUTION REFUNDS":"$0.00",
+						"Other Disbursements":"$0.00",
+						"TOTAL DISBURSEMENTS":"$927,715.00",
+						"Beginning Cash On Hand":"$14,732.00",
+						"Ending Cash On Hand":"$41,746.00",
+						"Net Contributions":"$0.00",
+						"Net Operating Expenditures":"$0.00",
+						"Debts/Loans Owed By":"$8,950.00",
+						"Debts/Loans Owed To":"$0.00"
+						}
+					},
+					"H4MN01088":{
+						"cand_id": "H4MN01088",
+						"cand_nm": "RIEDER, MARY ELIZABETH",
+						"office": "13700 COUNTY ROAD 9 , EYOTA, MN 55934",
+						"election_yr": "null",
+						"office_st": "null",
+						"district": "P",
+						"party": "Democratic-Farm-Labor",
+						"cmte_id": "C00287649",
+						"cmte_nm": "MARY RIEDER FOR CONGRESS",
+						"summary": {
+						"Coverage Start Date": "01/01/1995",
+						"Coverage End Date": "12/31/1996",
+						"Total Individual Contributions":"$334,045.00",
+						"Party Committees Contributions":"$14,350.00",
+						"Other Committees Contributions":"$262,114.00",
+						"Candidate Contributions":"$0.00",
+						"TOTAL CONTRIBUTIONS":"$0.00",
+						"Transfers from Authorized Committees":"$0.00",
+						"Candidate Loans":"$32,000.00",
+						"Other Loans":"$0.00",
+						"TOTAL LOANS":"$0.00",
+						"Offsets to Operating Expenditures":"$0.00",
+						"Other Receipts":"$0.00",
+						"TOTAL RECEIPTS":"$644,547.00",
+						"Operating Expenditures":"$620,807.00",
+						"Transfers To Authorized Committees":"$0.00",
+						"Candidate Loan Repayments":"$0.00",
+						"Other Loan Repayments":"$0.00",
+						"TOTAL LOAN REPAYMENTS":"$0.00",
+						"Individual Refunds":"$100.00",
+						"Political Party Refunds":"$0.00",
+						"Other Committee Refunds":"$500.00",
+						"TOTAL CONTRIBUTION REFUNDS":"$0.00",
+						"Other Disbursements":"$0.00",
+						"TOTAL DISBURSEMENTS":"$625,244.00",
+						"Beginning Cash On Hand":"$159.00",
+						"Ending Cash On Hand":"$19,561.00",
+						"Net Contributions":"$0.00",
+						"Net Operating Expenditures":"$0.00",
+						"Debts/Loans Owed By":"$71,554.00",
+						"Debts/Loans Owed To":"$0.00"
+						}
+					}
+				}
+			},
+			"2":{
+				"candidates":{
+					"H2MN02056":{
+						"cand_id": "H2MN02056",
+						"cand_nm": "MINGE, DAVID",
+						"office": "RR 4 BOX 183 , MONTEVIDEO, MN 56265",
+						"election_yr": "null",
+						"office_st": "null",
+						"district": "P",
+						"party": "Democratic-Farm-Labor",
+						"cmte_id": "C00264846",
+						"cmte_nm": "MINGE FOR CONGRESS",
+						"summary": {
+						"Coverage Start Date": "01/01/1995",
+						"Coverage End Date": "12/31/1996",
+						"Total Individual Contributions":"$249,353.00",
+						"Party Committees Contributions":"$5,734.00",
+						"Other Committees Contributions":"$354,419.00",
+						"Candidate Contributions":"$0.00",
+						"TOTAL CONTRIBUTIONS":"$0.00",
+						"Transfers from Authorized Committees":"$0.00",
+						"Candidate Loans":"$800.00",
+						"Other Loans":"$0.00",
+						"TOTAL LOANS":"$0.00",
+						"Offsets to Operating Expenditures":"$0.00",
+						"Other Receipts":"$0.00",
+						"TOTAL RECEIPTS":"$633,295.00",
+						"Operating Expenditures":"$584,173.00",
+						"Transfers To Authorized Committees":"$25,700.00",
+						"Candidate Loan Repayments":"$800.00",
+						"Other Loan Repayments":"$0.00",
+						"TOTAL LOAN REPAYMENTS":"$0.00",
+						"Individual Refunds":"$0.00",
+						"Political Party Refunds":"$0.00",
+						"Other Committee Refunds":"$3,000.00",
+						"TOTAL CONTRIBUTION REFUNDS":"$0.00",
+						"Other Disbursements":"$0.00",
+						"TOTAL DISBURSEMENTS":"$616,673.00",
+						"Beginning Cash On Hand":"$7,131.00",
+						"Ending Cash On Hand":"$23,753.00",
+						"Net Contributions":"$0.00",
+						"Net Operating Expenditures":"$0.00",
+						"Debts/Loans Owed By":"$2,217.00",
+						"Debts/Loans Owed To":"$0.00"
+						}
+					},
+					"H6MN02099":{
+						"cand_id": "H6MN02099",
+						"cand_nm": "DUEHRING, CRAIG WILLIAM",
+						"office": "PO BOX 541 , NEW ULM, MN 56073",
+						"election_yr": "null",
+						"office_st": "null",
+						"district": "P",
+						"party": "Republican Party",
+						"cmte_id": "C00315457",
+						"cmte_nm": "CRAIG DUEHRING FOR CONGRESS",
+						"summary": {
+						"Coverage Start Date": "01/01/1996",
+						"Coverage End Date": "12/31/1996",
+						"Total Individual Contributions":"$6,381.00",
+						"Party Committees Contributions":"$0.00",
+						"Other Committees Contributions":"$0.00",
+						"Candidate Contributions":"$0.00",
+						"TOTAL CONTRIBUTIONS":"$0.00",
+						"Transfers from Authorized Committees":"$0.00",
+						"Candidate Loans":"$27,000.00",
+						"Other Loans":"$0.00",
+						"TOTAL LOANS":"$0.00",
+						"Offsets to Operating Expenditures":"$0.00",
+						"Other Receipts":"$0.00",
+						"TOTAL RECEIPTS":"$33,436.00",
+						"Operating Expenditures":"$3,117.00",
+						"Transfers To Authorized Committees":"$0.00",
+						"Candidate Loan Repayments":"$25,000.00",
+						"Other Loan Repayments":"$0.00",
+						"TOTAL LOAN REPAYMENTS":"$0.00",
+						"Individual Refunds":"$746.00",
+						"Political Party Refunds":"$0.00",
+						"Other Committee Refunds":"$0.00",
+						"TOTAL CONTRIBUTION REFUNDS":"$0.00",
+						"Other Disbursements":"$0.00",
+						"TOTAL DISBURSEMENTS":"$28,863.00",
+						"Beginning Cash On Hand":"$0.00",
+						"Ending Cash On Hand":"$4,573.00",
+						"Net Contributions":"$0.00",
+						"Net Operating Expenditures":"$0.00",
+						"Debts/Loans Owed By":"$2,000.00",
+						"Debts/Loans Owed To":"$0.00"
+						}
+					}
+				}
+			},
+			"3":{
+				"candidates":{
+					
+				}
+			},
+			"4":{
+				"candidates":{
+					
+				}
+			},
+			"5":{
+				"candidates":{
+					
+				}
+			},
+			"6":{
+				"candidates":{
+					"H2MN06073":{
+						"cand_id": "H2MN06073",
+						"cand_nm": "LUTHER, WILLIAM P",
+						"office": "6375 ST CROIX TRAIL NORTH #147 , STILLWATER, MN 55082",
+						"election_yr": "null",
+						"office_st": "null",
+						"district": "P",
+						"party": "Democratic Party",
+						"cmte_id": "C00165449",
+						"cmte_nm": "LUTHER FOR CONGRESS VOLUNTEER COMMITTEE",
+						"summary": {
+						"Coverage Start Date": "01/01/1995",
+						"Coverage End Date": "12/31/1996",
+						"Total Individual Contributions":"$826,536.00",
+						"Party Committees Contributions":"$5,934.00",
+						"Other Committees Contributions":"$439,402.00",
+						"Candidate Contributions":"$0.00",
+						"TOTAL CONTRIBUTIONS":"$0.00",
+						"Transfers from Authorized Committees":"$0.00",
+						"Candidate Loans":"$0.00",
+						"Other Loans":"$0.00",
+						"TOTAL LOANS":"$0.00",
+						"Offsets to Operating Expenditures":"$0.00",
+						"Other Receipts":"$0.00",
+						"TOTAL RECEIPTS":"$1,368,013.00",
+						"Operating Expenditures":"$825,843.00",
+						"Transfers To Authorized Committees":"$0.00",
+						"Candidate Loan Repayments":"$0.00",
+						"Other Loan Repayments":"$1,000.00",
+						"TOTAL LOAN REPAYMENTS":"$0.00",
+						"Individual Refunds":"$5,695.00",
+						"Political Party Refunds":"$0.00",
+						"Other Committee Refunds":"$1,250.00",
+						"TOTAL CONTRIBUTION REFUNDS":"$0.00",
+						"Other Disbursements":"$0.00",
+						"TOTAL DISBURSEMENTS":"$850,638.00",
+						"Beginning Cash On Hand":"$2,871.00",
+						"Ending Cash On Hand":"$520,246.00",
+						"Net Contributions":"$0.00",
+						"Net Operating Expenditures":"$0.00",
+						"Debts/Loans Owed By":"$0.00",
+						"Debts/Loans Owed To":"$0.00"
+						}
+					}
+				}
+			},
+			"7":{
+				"candidates":{
+					
+				}
+			},
+			"8":{
+				"candidates":{
+					
+				}
+			}
+		}
+	}
+}
