@@ -168,9 +168,9 @@ def getUSHouseMemberData(district):
     else:
         return None
 
-def getFECData(district):
+def getFECData(year):
     try:
-        json_data = open('templates/' + district + '.json')
+        json_data = open('templates/mnfec' + year + '.json')
         data = json.load(json_data)
         return data
     except:

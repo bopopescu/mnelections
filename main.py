@@ -212,6 +212,7 @@ def formatStateLegNum(n):
 	return '0'+str(n)
 
 election_years=['2012','2010','2008','2006','2004','2002','2000']
+money_years=['2014','2012','2010','2008','2006','2004','2002','2000']
 office_link_names=['president','ussenator1','ussenator2','governor','secretaryofstate','auditor','attorneygeneral','amendment1','amendment2']
 other_office_link_names=['ushouse','senate','house']
 
@@ -222,6 +223,17 @@ offices_2006={'offices':['0102','0331','0332','0333','0335','0351'],'senate':Tru
 offices_2004={'offices':['0101'],'senate':False}
 offices_2002={'offices':['0103','0331','0332','0333','0335'],'senate':True}
 offices_2000={'offices':['0101','0102'],'senate':True}
+
+money_offices={
+    '2014':[('ussenator','US Senator')],
+    '2012':[('ussenator','US Senator')],
+    '2010':[('ussenator','US Senator')],
+    '2008':[('ussenator','US Senator')],
+    '2006':[('ussenator','US Senator')],
+    '2004':[('ussenator','US Senator')],
+    '2002':[('ussenator','US Senator')],
+    '2000':[('ussenator','US Senator')],
+}
 
 p_offices_2012={'offices':['0102'],'senate':True}
 p_offices_2010={'offices':['0331','0332','0335'],'senate':True}
@@ -1078,62 +1090,121 @@ class BubblePageHandler(GenericHandler):
         params['description']=default_meta_description
         self.render(cong_bubble,**params)  
 
-# def getFECDataForDisplay(district):
-#     data=getFECData(ushouse_district_names[district])
-#     for d in data:
-#         results={
-#             'name':data[d]['cand_nm'],
-#             'party':data[d]['party'],
-#             'description':data[d]['description'],
-#             'copyright':data[d]['copyright'],
-#             #'candidate_id':data[d]['cand_id'],
-#             'money':{
-#                 'Total Individual':data[d]['summary']['Total Individual Contributions'],
-#                 'Party Committees':data[d]['summary']['Party Committees Contributions'],
-#                 'Other Committees':data[d]['summary']['Other Committees Contributions'],
-#                 'Candidates':data[d]['summary']['Candidate Contributions'],
-#                 'Total Contributions':data[d]['summary']['TOTAL CONTRIBUTIONS'],
-#                 'Total Loans':data[d]['summary']['TOTAL LOANS'],
-#                 'Total Receipts':data[d]['summary']['TOTAL RECEIPTS'],
+def formatMoney(money):
+    if '(' in money:
+        money=money.replace('$','')
+        money=money.replace(')','')
+        money=money.replace('(','-')
+        return int(money[:-3])
+    else:
+        return int(money[1:-3].replace(',',''))
 
-#             },
-#         }
-#         return results
+def getFECSummeryDataForDisplay(year,active,dist):
+    data=getFECData(year)
+    if data!=None:
+        for d in data:
+            results={
+                'description':data[d]['description'],
+                'copyright':data[d]['copyright'],
+                'districts':{}
+            }
+            for district in data[d]['districts']:
+                if (active=='ushouse' and district!="MN") or (active!='ushouse' and district=='MN'):
+                    if dist==None or dist == district:
+                        results['districts'][district]={
+                            'candidates':{}
+                        }
+                        for candidate in data[d]['districts'][district]['candidates']:
+                            first=data[d]['districts'][district]['candidates'][candidate]['cand_nm'][data[d]['districts'][district]['candidates'][candidate]['cand_nm'].find(',')+2:].split()
+                            name = first[0] + ' ' + data[d]['districts'][district]['candidates'][candidate]['cand_nm'][:data[d]['districts'][district]['candidates'][candidate]['cand_nm'].find(',')]
+                            results['districts'][district]['candidates'][candidate]={
+                                'name':name.title(),
+                                'party':data[d]['districts'][district]['candidates'][candidate]['party'],
+                                'candidate_id':data[d]['districts'][district]['candidates'][candidate]['cand_id'],
+                                'district':district,
+                                'money':{
+                                    'Beginning Cash On Hand':formatMoney(data[d]['districts'][district]['candidates'][candidate]['summary']['Beginning Cash On Hand']),
+                                    'Ending Cash On Hand':formatMoney(data[d]['districts'][district]['candidates'][candidate]['summary']['Ending Cash On Hand']),
+                                    'Net Receipts':formatMoney(data[d]['districts'][district]['candidates'][candidate]['summary']['TOTAL RECEIPTS']),
+                                    'Net Disbursments':formatMoney(data[d]['districts'][district]['candidates'][candidate]['summary']['TOTAL DISBURSEMENTS']),
+                                    'Debts/Loans Owed By':formatMoney(data[d]['districts'][district]['candidates'][candidate]['summary']['Debts/Loans Owed By']),
+                                    'Debts/Loans Owed To':formatMoney(data[d]['districts'][district]['candidates'][candidate]['summary']['Debts/Loans Owed To']),
+                                }
+                            }
+            return results
+    else:
+        return None
 
-def getFECSummeryDataForDisplay(district):
-    data=getFECData(district)
-    for d in data:
-        first=data[d]['cand_nm'][data[d]['cand_nm'].find(',')+2:].split()
-        name = first[0] + ' ' + data[d]['cand_nm'][:data[d]['cand_nm'].find(',')]
-        results={
-            'name':name.title(),
-            'party':data[d]['party'],
-            'description':data[d]['description'],
-            'copyright':data[d]['copyright'],
-            #'candidate_id':data[d]['cand_id'],
-            'money':{
-                'Beginning Cash On Hand':int(data[d]['summary']['Beginning Cash On Hand'][1:-3].replace(',', '')),
-                'Ending Cash On Hand':int(data[d]['summary']['Ending Cash On Hand'][1:-3].replace(',', '')),
-                'Net Contributions':int(data[d]['summary']['Net Contributions'][1:-3].replace(',', '')),
-                'Net Operating Expenditures':int(data[d]['summary']['Net Operating Expenditures'][1:-3].replace(',', '')),
-                'Debts/Loans Owed By':int(data[d]['summary']['Debts/Loans Owed By'][1:-3].replace(',', '')),
-                'Debts/Loans Owed To':int(data[d]['summary']['Debts/Loans Owed To'][1:-3].replace(',', '')),
-            },
-        }
-        return results
-
-class MemberPageHandler(GenericHandler):
+class MoneyPageHandler(GenericHandler):
     def get(self):
-        params=self.check_login('/member')
-        params['title']="MN Elections Info"
+        params=self.check_login('/money')
         params['description']=default_meta_description
-        r=range(1,9)
-        params['data']=[]
-        for d in r:
-            params['district']=str(d)
-            params['data'].append(getFECSummeryDataForDisplay(ushouse_district_names[params['district']]))
-        #self.write(params['data'])
+        params['years']=money_years
+        params['active']='ussenator'
+        params['year']='2012'
+        params['district_key']=us_rep_id_key
+        params['office_names']=money_offices[params['year']]
+        params['title']="MN Elections Info | " + params['year'] + " US House Campaign Finance Info"
+        params['data']=getFECSummeryDataForDisplay(params['year'],params['active'],None)
         self.render(cong_money,**params)
+
+class MoneyYearPageHandler(GenericHandler):
+    def get(self,year):
+        params=self.check_login('/money/'+year)
+        params['description']=default_meta_description
+        if year in money_years:
+            params['year']=year
+            params['years']=money_years
+            params['active']='ussenator'
+            params['district_key']=us_rep_id_key
+            params['office_names']=money_offices[params['year']]
+            params['title']="MN Elections Info | " + params['year'] + " US House Campaign Finance Info"
+            params['data']=getFECSummeryDataForDisplay(params['year'],params['active'],None)
+            self.render(cong_money,**params)
+        else:
+            self.redirect('/money')
+
+class MoneyChamberPageHandler(GenericHandler):
+    def get(self,year,chamber):
+        params=self.check_login('/money/'+year+'/'+chamber)
+        params['description']=default_meta_description
+        if year in money_years:
+            params['year']=year
+            params['years']=money_years
+            if chamber == 'ushouse' or chamber == money_offices[year][0][0]:
+                params['active']=chamber
+                params['district_key']=us_rep_id_key
+                params['office_names']=money_offices[params['year']]
+                if chamber=='ushouse':
+                    params['title']="MN Elections Info | " + params['year'] + " US House Campaign Finance Info"
+                else:
+                    params['title']="MN Elections Info | " + params['year'] + " US Senate Campaign Finance Info"
+                params['data']=getFECSummeryDataForDisplay(params['year'],params['active'],None)
+                #self.write(params['data'])
+                self.render(cong_money,**params)
+            else:
+                self.redirect('/money/'+year)
+        else:
+            self.redirect('/money')
+
+class MoneyDistrictPageHandler(GenericHandler):
+    def get(self,year,district):
+        params=self.check_login('/money/'+year+'/'+district)
+        params['description']=default_meta_description
+        if year in money_years:
+            params['year']=year
+            params['years']=money_years
+            params['active']='ushouse'
+            params['office']=district
+            params['district_key']=us_rep_id_key
+            params['office_names']=money_offices[params['year']]
+            params['title']="MN Elections Info | " + params['year'] + " US House district " + params['office'] + " Campaign Finance Info"
+            params['data']=getFECSummeryDataForDisplay(params['year'],params['active'],params['office'])
+            #self.write(params['data'])
+            self.render(cong_money,**params)
+        else:
+            self.redirect('/money')
+        
 
 class ParseResultsHandler(GenericHandler):
     def get(self,year):
@@ -1240,12 +1311,12 @@ app = webapp2.WSGIApplication([
     ('/general/?', StatewideHandler),
     ('/general/([0-9]+)/?', StatewideYearHandler),
     ('/general/([0-9]+)/([A-Za-z0-9]+)?/?', StatewideYearOfficeHandler),
-    ('/general/([0-9]+)/ushouse/([0-9])/?', StatewideYearUSHouseHandler),
+    ('/general/([0-9]+)/ushouse/([1-8])/?', StatewideYearUSHouseHandler),
     ('/general/([0-9]+)/(house|senate)/([0-9]+[A|B]?)/?', StatewideYearLegHandler),
     ('/primary/?', PrimaryHandler),
     ('/primary/([0-9]+)/?', PrimaryYearHandler),
     ('/primary/([0-9]+)/([A-Za-z0-9]+)?/?', PrimaryYearOfficeHandler),
-    ('/primary/([0-9]+)/ushouse/([0-9])/?', PrimaryYearUSHouseHandler),
+    ('/primary/([0-9]+)/ushouse/([1-8])/?', PrimaryYearUSHouseHandler),
     ('/primary/([0-9]+)/(house|senate)/([0-9]+[A|B]?)/?', PrimaryYearLegHandler),
     ('/graph/?', GraphPageHandler),
     ('/graph/c', CustomGraphPageHandler),
@@ -1253,7 +1324,10 @@ app = webapp2.WSGIApplication([
     ('/maps/(ushouse|house|senate)/?', MapsChamberPageHandler),
     ('/maps/(ushouse|house|senate)/([0-9][0-9]?[A|B]?)/?', MapsChamberDistrictPageHandler),
     # ('/bubble/?', BubblePageHandler),
-    # ('/member/?', MemberPageHandler),
+    ('/money/?', MoneyPageHandler),
+    ('/money/([0-9]+)/?', MoneyYearPageHandler),
+    ('/money/([0-9]+)/(ushouse|ussenator|ussenator)/?', MoneyChamberPageHandler),
+    ('/money/([0-9]+)/ushouse/([1-8])/?', MoneyDistrictPageHandler),
     ('/about/?', AboutPageHandler),
     ('/feedback/?', FeedbackPageHandler),
     ('/feedback-response/?', FeedbackResponsePageHandler),

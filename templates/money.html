@@ -8,26 +8,39 @@
   
   function drawChart() {
     var table_data = google.visualization.arrayToDataTable([
-        ['Candidate','Party','Beginning CoH','Ending CoH','Net Contributions','Net Expenditures'],
-        {% for d in data %}['{{d['name']}}','{{d['party'][0]}}',{{d['money']['Beginning Cash On Hand']}},{{d['money']['Ending Cash On Hand']}},{{d['money']['Net Contributions']}},{{d['money']['Net Operating Expenditures']}}],{% endfor %}]);
+        ['Candidate','District','Party','Beginning CoH','Ending CoH','Total Receipts','Total Disbursments'],
+        {% for d in data['districts'] %}
+          {% for c in data['districts'][d]['candidates'] %}
+            ['{{data['districts'][d]['candidates'][c]['name']}}','{{d}}','{{data['districts'][d]['candidates'][c]['party'][0]}}',{{data['districts'][d]['candidates'][c]['money']['Beginning Cash On Hand']}},{{data['districts'][d]['candidates'][c]['money']['Ending Cash On Hand']}},{{data['districts'][d]['candidates'][c]['money']['Net Receipts']}},{{data['districts'][d]['candidates'][c]['money']['Net Disbursments']}}],
+          {% endfor %}
+        {% endfor %}]);
 
     var table_options = {title: '2012 FEC Reports',
             allowHtml: true,
             fontSize: 14,
+            sortColumn: 6,
+            sortAscending: false,
           };
+    var moneyFormatter = new google.visualization.NumberFormat({pattern: '$###,###,###'});
 
-    var table = new google.visualization.Table(document.getElementById('table_div'));
+    moneyFormatter.format(table_data, 3);    
+    moneyFormatter.format(table_data, 4); 
+    moneyFormatter.format(table_data, 5);     
+    moneyFormatter.format(table_data, 6); 
+
+    var table = new google.visualization.Table(document.getElementById('fec-table_div'));
     table.draw(table_data, table_options);
   };
 </script>
 
 <div id='front-dashboard-container'>
-  <h1>US House Fundraising</h1><h2>{{data[0]['description']}}</h2><br><br>
+  <h1>US House Fundraising</h1><h2>{{data['description']}}</h2><br><br>
     
+    {% include 'money-menus.html' %}
 
 	<div id="fec-chart-area">
-		<div id="table_div" style='width:770px;'></div>
-		<div id="fec-copywrite"><em>{{data[0]['copyright']}}</em></div>
+		<div id="fec-table_div" style='min-height:300px;'></div>
+		<div id="fec-copywrite"><em><a href="http://www.fec.gov/">{{data['copyright']}}</a></em></div>
 	</div>
 </div>
 {% endblock %}
