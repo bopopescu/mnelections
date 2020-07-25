@@ -34,7 +34,7 @@ GLOBAL_JSON_TEXT = """{
         },
         "parseapi": {
             "applicationId": "%s",
-            "masterKey": "%s"
+            "mainKey": "%s"
         }
     },
     "global": {
